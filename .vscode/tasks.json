@@ -505,14 +505,6 @@
 			}
 		},
 		{
-			"type": "npm",
-			"script": "eslint",
-			"problemMatcher": {
-				"source": "eslint",
-				"base": "$eslint-stylish"
-			}
-		},
-		{
 			"type": "shell",
 			"command": "node build/lib/preLaunch.ts",
 			"label": "Ensure Prelaunch Dependencies",

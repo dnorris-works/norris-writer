@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *  Copyright (c) David Norris. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import assert from 'assert';
 import { readFileSync } from 'fs';
@@ -49,6 +49,17 @@ suite('product.json - Norris Writer Identity', () => {
 			urlProtocol: 'norris-writer',
 			linuxIconName: 'norris-writer',
 		});
+	});
+
+	test('license URLs point to Norris Writer repository', () => {
+		assert.strictEqual(
+			product['licenseUrl'],
+			'https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt'
+		);
+		assert.strictEqual(
+			product['serverLicenseUrl'],
+			'https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt'
+		);
 	});
 
 	test('dev features and built-in extensions are disabled for writers', () => {

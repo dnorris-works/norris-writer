@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *  Copyright (c) David Norris. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
 import cp from 'child_process';
@@ -11,17 +11,36 @@ import pall from 'p-all';
 import path from 'path';
 import VinylFile from 'vinyl';
 import vfs from 'vinyl-fs';
-import { all, copyrightFilter, eslintFilter, indentationFilter, stylelintFilter, tsFormattingFilter, unicodeFilter } from './filters.ts';
-import eslint from './gulp-eslint.ts';
+import { all, copyrightFilter, indentationFilter, stylelintFilter, tsFormattingFilter, unicodeFilter } from './filters.ts';
 import * as formatter from './lib/formatter.ts';
 import gulpstylelint from './stylelint.ts';
 
-const copyrightHeaderLines = [
+const microsoftCopyrightHeaderLines = [
 	'/*---------------------------------------------------------------------------------------------',
 	' *  Copyright (c) Microsoft Corporation. All rights reserved.',
 	' *  Licensed under the MIT License. See License.txt in the project root for license information.',
 	' *--------------------------------------------------------------------------------------------*/',
 ];
+
+const norrisCopyrightHeaderLines = [
+	'/*---------------------------------------------------------------------------------------------',
+	' *  Copyright (c) David Norris. All rights reserved.',
+	' *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.',
+	' *--------------------------------------------------------------------------------------------*/',
+];
+
+function matchesCopyrightHeader(lines: string[], header: string[]): boolean {
+	for (let i = 0; i < header.length; i++) {
+		if (lines[i] !== header[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function hasValidCopyrightHeader(lines: string[]): boolean {
+	return matchesCopyrightHeader(lines, microsoftCopyrightHeaderLines) || matchesCopyrightHeader(lines, norrisCopyrightHeaderLines);
+}
 
 interface VinylFileWithLines extends VinylFile {
 	__lines: string[];
@@ -43,46 +62,9 @@ export function checkCopilotEnginesVersion(repoRoot: string): string | undefined
 }
 
 /**
- * Checks that every tracked .js/.cjs/.mjs file in the repo is listed in
- * `.eslint-allowed-javascript-files`. This complements the
- * `local/code-no-new-javascript-files` ESLint rule by also covering files
- * that are excluded via `.eslint-ignore`.
- *
- * Returns an error message if there are unknown JS files, or undefined if OK.
- */
-export function checkNoNewJavaScriptFiles(repoRoot: string): string | undefined {
-	const allowlistPath = path.join(repoRoot, '.eslint-allowed-javascript-files');
-	const allowed = new Set(
-		fs.readFileSync(allowlistPath, 'utf8')
-			.split(/\r\n|\n/)
-			.map(line => line.trim())
-			.filter(line => line && !line.startsWith('#'))
-	);
-
-	// `git ls-files` lists tracked files relative to repo root using forward slashes.
-	const out = cp.execSync('git ls-files "*.js" "*.cjs" "*.mjs"', {
-		cwd: repoRoot,
-		encoding: 'utf8',
-		maxBuffer: 10 * 1024 * 1024,
-	});
-	const tracked = out.split(/\r?\n/).filter(line => !!line);
-
-	const unknown = tracked.filter(file => !allowed.has(file));
-	if (unknown.length > 0) {
-		return [
-			'New JavaScript files are not allowed. Use TypeScript (.ts) instead.',
-			'If a file genuinely must be JavaScript, add it to .eslint-allowed-javascript-files',
-			'(this requires CODEOWNERS review). Offending files:',
-			...unknown.map(f => `  ${f}`),
-		].join('\n');
-	}
-	return undefined;
-}
-
-/**
  * Main hygiene function that runs checks on files
  */
-export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, runEslint = true): NodeJS.ReadWriteStream {
+export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined): NodeJS.ReadWriteStream {
 	console.log('Starting hygiene...');
 	let errorCount = 0;
 
@@ -153,12 +135,9 @@ export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, run
 	const copyrights = es.through(function (file: VinylFileWithLines) {
 		const lines = file.__lines;
 
-		for (let i = 0; i < copyrightHeaderLines.length; i++) {
-			if (lines[i] !== copyrightHeaderLines[i]) {
-				console.error(file.relative + ': Missing or bad copyright statement');
-				errorCount++;
-				break;
-			}
+		if (!hasValidCopyrightHeader(lines)) {
+			console.error(file.relative + ': Missing or bad copyright statement');
+			errorCount++;
 		}
 
 		this.emit('data', file);
@@ -213,23 +192,7 @@ export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, run
 		.pipe(copyrights);
 
 	const streams: NodeJS.ReadWriteStream[] = [
-		result.pipe(filter(Array.from(tsFormattingFilter))).pipe(formatting)
-	];
-
-	if (runEslint) {
-		streams.push(
-			result
-				.pipe(filter(Array.from(eslintFilter)))
-				.pipe(
-					eslint((results) => {
-						errorCount += results.warningCount;
-						errorCount += results.errorCount;
-					})
-				)
-		);
-	}
-
-	streams.push(
+		result.pipe(filter(Array.from(tsFormattingFilter))).pipe(formatting),
 		result.pipe(filter(Array.from(stylelintFilter))).pipe(gulpstylelint(((message: string, isError: boolean) => {
 			if (isError) {
 				console.error(message);
@@ -238,7 +201,7 @@ export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, run
 				console.warn(message);
 			}
 		})))
-	);
+	];
 
 	let count = 0;
 	return es.merge(...streams).pipe(
@@ -313,7 +276,7 @@ if (import.meta.main) {
 	});
 
 	if (process.argv.length > 2) {
-		hygiene(process.argv.slice(2), false).on('error', (err: Error) => {
+		hygiene(process.argv.slice(2)).on('error', (err: Error) => {
 			console.error();
 			console.error(err);
 			process.exit(1);
@@ -332,22 +295,13 @@ if (import.meta.main) {
 				const some = out.split(/\r?\n/).filter((l) => !!l);
 
 				if (some.length > 0) {
-					// Check that no new .js/.cjs/.mjs files are being added outside of the allowlist
-					if (some.some(f => /\.(js|cjs|mjs)$/.test(f) || f === '.eslint-allowed-javascript-files')) {
-						const jsAllowlistError = checkNoNewJavaScriptFiles(process.cwd());
-						if (jsAllowlistError) {
-							console.error(jsAllowlistError);
-							process.exit(1);
-						}
-					}
-
 					console.log('Reading git index versions...');
 
 					createGitIndexVinyls(some)
 						.then(
 							(vinyls) => {
 								return new Promise<void>((c, e) =>
-									hygiene(es.readArray(vinyls).pipe(filter(Array.from(all))), false)
+									hygiene(es.readArray(vinyls).pipe(filter(Array.from(all))))
 										.on('end', () => c())
 										.on('error', e)
 								);

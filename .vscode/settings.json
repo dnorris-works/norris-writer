@@ -133,8 +133,7 @@
 	"git.diagnosticsCommitHook.enabled": true,
 	"git.diagnosticsCommitHook.sources": {
 		"*": "error",
-		"ts": "warning",
-		"eslint": "warning"
+		"ts": "warning"
 	},
 	"git.worktreeIncludeFiles": [
 		"product.overrides.json",
@@ -179,7 +178,6 @@
 	],
 	// --- Tools ---
 	"npm.exclude": "**/extensions/**",
-	"eslint.useFlatConfig": true,
 	"emmet.excludeLanguages": [],
 	"gulp.autoDetect": "off",
 	"rust-analyzer.linkedProjects": [

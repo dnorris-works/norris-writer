@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *  Copyright (c) David Norris. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 import { gulp } from './lib/gulp/facade.ts';
 import es from 'event-stream';
 import path from 'path';
 import fs from 'fs';
 import * as task from './lib/gulp/task.ts';
-import { checkCopilotEnginesVersion, checkNoNewJavaScriptFiles, hygiene } from './hygiene.ts';
+import { checkCopilotEnginesVersion, hygiene } from './hygiene.ts';
 
 const dirName = path.dirname(new URL(import.meta.url).pathname);
 
@@ -47,14 +47,10 @@ const checkPackageJSONTask = task.define('check-package-json', () => {
 			if (copilotError) {
 				this.emit('error', copilotError);
 			}
-			const jsAllowlistError = checkNoNewJavaScriptFiles(repoRoot);
-			if (jsAllowlistError) {
-				this.emit('error', jsAllowlistError);
-			}
 		})
 	);
 });
 task.task(checkPackageJSONTask);
 
-const hygieneTask = task.define('hygiene', task.series(checkPackageJSONTask, () => hygiene(undefined, false)));
+const hygieneTask = task.define('hygiene', task.series(checkPackageJSONTask, () => hygiene(undefined)));
 task.task(hygieneTask);

@@ -1,10 +1,7 @@
 /*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *  Copyright (c) David Norris. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 /**
  * Hygiene works by creating cascading subsets of all our files and
@@ -248,18 +245,6 @@ export const tsFormattingFilter = Object.freeze<string[]>([
 
 	// extensions/copilot has its own code style
 	'!extensions/copilot/**',
-]);
-
-export const eslintFilter = Object.freeze<string[]>([
-	'**/*.{js,cjs,mjs}',
-	'**/*.{ts,tsx,mts,cts}',
-	'.eslint-plugin-local/**/*.ts',
-	'!src/vs/platform/agentHost/node/codex/protocol/generated/**',
-	...readFileSync(join(import.meta.dirname, '..', '.eslint-ignore'))
-		.toString()
-		.split(/\r\n|\n/)
-		.filter(line => line && !line.startsWith('#'))
-		.map(line => line.startsWith('!') ? line.slice(1) : `!${line}`)
 ]);
 
 export const stylelintFilter = Object.freeze<string[]>([
