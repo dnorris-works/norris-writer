@@ -12,13 +12,20 @@ import { LifecyclePhase } from '../../../services/lifecycle/common/lifecycle.js'
 import { WORKSPACE_TRUST_ENABLED } from '../../../services/workspaces/common/workspaceTrust.js';
 import { ChatConfiguration } from '../../chat/common/constants.js';
 import {
+	NORRIS_WRITER_PAPER_EDITOR_COLORS,
+	NorrisWriterEditorAppearance,
+	NorrisWriterEditorAppearanceSetting,
+} from '../common/editorAppearanceConstants.js';
+import {
 	TOKENMIX_DEFAULT_BASE_URL,
 	TOKENMIX_DEFAULT_MODEL,
 	TokenMixConfiguration,
 } from '../common/tokenMixConstants.js';
 import './norrisWriterActions.js';
+import './norrisWriterEditorAppearance.js';
 import './norrisWriterWordCount.js';
 import './norrisWriterChatPlaceholder.js';
+import './norrisWriterMarkdownFormatting.js';
 import './tokenMixContribution.js';
 
 Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultConfigurations([{
@@ -33,6 +40,12 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		'zenMode.hideStatusBar': false,
 		'zenMode.hideActivityBar': false,
 		'norrisWriter.wordCount.enabled': true,
+		'norrisWriter.markdown.alwaysRendered': true,
+		[NorrisWriterEditorAppearanceSetting]: NorrisWriterEditorAppearance.Paper,
+		'workbench.colorCustomizations': { ...NORRIS_WRITER_PAPER_EDITOR_COLORS },
+		'workbench.editorAssociations': {
+			'*.md': 'vscode.markdown.editor',
+		},
 		[TokenMixConfiguration.Enabled]: true,
 		[TokenMixConfiguration.BaseUrl]: TOKENMIX_DEFAULT_BASE_URL,
 		[TokenMixConfiguration.DefaultModel]: TOKENMIX_DEFAULT_MODEL,
@@ -64,6 +77,24 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerConfigurat
 			default: true,
 			order: 1,
 			description: localize('norrisWriter.wordCount.enabled', "Show word count in the status bar for the active document."),
+		},
+		'norrisWriter.markdown.alwaysRendered': {
+			type: 'boolean',
+			default: true,
+			order: 2,
+			description: localize('norrisWriter.markdown.alwaysRendered', "In Writing View, keep text formatted while you edit (hide # and ** markers). Turn off to show raw Markdown syntax on the active paragraph."),
+		},
+		[NorrisWriterEditorAppearanceSetting]: {
+			type: 'string',
+			enum: [NorrisWriterEditorAppearance.FollowTheme, NorrisWriterEditorAppearance.Paper],
+			enumDescriptions: [
+				localize('norrisWriter.editor.appearance.followTheme', "Use the active color theme for editor background and text."),
+				localize('norrisWriter.editor.appearance.paper', "Use a warm cream page with black text in editors, ignoring the theme."),
+			],
+			default: NorrisWriterEditorAppearance.Paper,
+			order: 3,
+			title: localize('norrisWriter.editor.appearance.title', "Editor appearance"),
+			description: localize('norrisWriter.editor.appearance', "Controls whether manuscript editors use the color theme or a fixed cream paper style with black text."),
 		},
 		[TokenMixConfiguration.Enabled]: {
 			type: 'boolean',

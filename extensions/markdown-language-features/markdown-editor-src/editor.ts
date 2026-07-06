@@ -11,6 +11,7 @@ import '@vscode/markdown-editor/editor.css';
 import '@vscode/markdown-editor/themes/vscode.css';
 import './markdownEditor.css';
 import { WebviewSyntaxHighlighter } from './syntaxHighlighter';
+import { HeadingLevel, setHeadingLevel, wrapSelection } from './formatting';
 
 interface VsCodeApi {
 	postMessage(message: unknown): void;
@@ -43,7 +44,9 @@ class Editor extends Disposable {
 				case 'init': {
 					if (!this.#initialized) {
 						this.#initialized = true;
-						this.#createView(host, !!message.readonly);
+						const alwaysRendered = message.alwaysRendered !== false;
+						const paperAppearance = !!message.paperAppearance;
+						this.#createView(host, !!message.readonly, alwaysRendered, paperAppearance);
 						this.model.sourceText.set(new StringValue(message.content), undefined);
 					}
 					break;
@@ -62,14 +65,54 @@ class Editor extends Disposable {
 					this.model.gutterMarkers.set(markers, undefined);
 					break;
 				}
+				case 'format': {
+					this.#applyFormat(message.command);
+					break;
+				}
 			}
 		});
 
 		this.#vscode.postMessage({ type: 'ready' });
 	}
 
-	#createView(host: HTMLElement, readonly: boolean): void {
+	#applyFormat(command: string): void {
+		if (command === 'bold') {
+			wrapSelection(this.model, '**', '**');
+			return;
+		}
+		if (command === 'italic') {
+			wrapSelection(this.model, '*', '*');
+			return;
+		}
+		const headingMatch = /^heading(\d)$/.exec(command);
+		if (headingMatch) {
+			const level = Number(headingMatch[1]) as HeadingLevel;
+			if (level >= 1 && level <= 6) {
+				setHeadingLevel(this.model, level);
+			}
+		}
+	}
+
+	#createView(host: HTMLElement, readonly: boolean, alwaysRendered: boolean, paperAppearance: boolean): void {
 		const model = this.model;
+		host.replaceChildren();
+		host.classList.toggle('norris-paper-theme', paperAppearance);
+		document.documentElement.classList.toggle('norris-paper-theme', paperAppearance);
+		document.body.classList.toggle('norris-paper-theme', paperAppearance);
+
+		if (!readonly && alwaysRendered) {
+			// Keep headings/bold/italic rendered while editing (Word-like). The
+			// default hybrid editor reveals markdown markers on the active block.
+			model.activeBlocksOverride.set([], undefined);
+		}
+
+		if (!readonly) {
+			host.appendChild(this.#createToolbar());
+		}
+
+		const editorHost = document.createElement('div');
+		editorHost.id = 'editor-surface';
+		host.appendChild(editorHost);
 
 		const view = this._register(new EditorView(model, {
 			classNames: ['md-theme-vscode'],
@@ -110,7 +153,7 @@ class Editor extends Disposable {
 		}));
 
 		this._register(new EditorController(model, view));
-		host.appendChild(view.element);
+		editorHost.appendChild(view.element);
 
 		if (!readonly) {
 			let firstTime = true;
@@ -122,6 +165,38 @@ class Editor extends Disposable {
 				firstTime = false;
 			}));
 		}
+	}
+
+	#createToolbar(): HTMLElement {
+		const toolbar = document.createElement('div');
+		toolbar.className = 'md-toolbar';
+
+		const addButton = (label: string, title: string, command: string) => {
+			const button = document.createElement('button');
+			button.type = 'button';
+			button.className = 'md-toolbar-button';
+			button.textContent = label;
+			button.title = title;
+			button.addEventListener('mousedown', (e) => e.preventDefault());
+			button.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.#applyFormat(command);
+			});
+			toolbar.appendChild(button);
+		};
+
+		for (let level = 1; level <= 6; level++) {
+			addButton(`H${level}`, `Heading ${level}`, `heading${level}`);
+		}
+
+		const separator = document.createElement('span');
+		separator.className = 'md-toolbar-separator';
+		toolbar.appendChild(separator);
+
+		addButton('B', 'Bold', 'bold');
+		addButton('I', 'Italic', 'italic');
+
+		return toolbar;
 	}
 }
 

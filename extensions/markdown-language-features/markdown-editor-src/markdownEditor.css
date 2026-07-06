@@ -16,7 +16,80 @@ body {
 }
 
 #editor {
+	display: flex;
+	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	overflow: scroll;
+	overflow: hidden;
+}
+
+#editor-surface {
+	flex: 1;
+	min-height: 0;
+	overflow: auto;
+}
+
+.md-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 2px;
+	padding: 4px 8px;
+	border-bottom: 1px solid var(--vscode-widget-border, var(--vscode-panel-border, #444));
+	background: var(--vscode-editorWidget-background, var(--vscode-editor-background));
+}
+
+.md-toolbar-button {
+	border: 1px solid transparent;
+	background: transparent;
+	color: var(--vscode-foreground);
+	font: 11px/1.4 var(--vscode-font-family);
+	padding: 2px 6px;
+	border-radius: 3px;
+	cursor: pointer;
+	min-width: 24px;
+}
+
+.md-toolbar-button:hover {
+	background: var(--vscode-toolbar-hoverBackground);
+}
+
+.md-toolbar-button:active {
+	background: var(--vscode-toolbar-activeBackground, var(--vscode-list-activeSelectionBackground));
+}
+
+.md-toolbar-separator {
+	width: 1px;
+	height: 16px;
+	margin: 0 4px;
+	background: var(--vscode-widget-border, var(--vscode-panel-border, #444));
+}
+
+#editor.norris-paper-theme {
+	--vscode-editor-background: #FAF8F5;
+	--vscode-editor-foreground: #000000;
+	--vscode-foreground: #000000;
+	--vscode-editorWidget-background: #FAF8F5;
+	background: #FAF8F5;
+	color: #000000;
+}
+
+#editor.norris-paper-theme .md-toolbar {
+	border-bottom-color: #E5D9C8;
+}
+
+#editor.norris-paper-theme .md-toolbar-button {
+	color: #000000;
+}
+
+#editor.norris-paper-theme .md-toolbar-button:hover {
+	background: #EDE4D6;
+}
+
+html.norris-paper-theme,
+body.norris-paper-theme {
+	--vscode-editor-background: #FAF8F5;
+	--vscode-editor-foreground: #000000;
+	background: #FAF8F5;
+	color: #000000;
 }

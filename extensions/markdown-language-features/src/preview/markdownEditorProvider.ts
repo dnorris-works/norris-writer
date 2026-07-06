@@ -43,7 +43,10 @@ export class MarkdownEditorProvider extends Disposable implements vscode.CustomT
 		const onMessage = webview.onDidReceiveMessage(async (message) => {
 			switch (message.type) {
 				case 'ready': {
-					webview.postMessage({ type: 'init', content: document.getText(), readonly: false });
+					const config = vscode.workspace.getConfiguration('norrisWriter');
+					const alwaysRendered = config.get<boolean>('markdown.alwaysRendered', true);
+					const paperAppearance = config.get<string>('editor.appearance', 'paper') === 'paper';
+					webview.postMessage({ type: 'init', content: document.getText(), readonly: false, alwaysRendered, paperAppearance });
 					break;
 				}
 				case 'edit': {
