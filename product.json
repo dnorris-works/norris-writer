@@ -36,77 +36,57 @@
 	"webviewContentExternalBaseUrlTemplate": "https://{{uuid}}.vscode-cdn.net/insider/ef65ac1ba57f57f2a3961bfe94aa20481caca4c6/out/vs/workbench/contrib/webview/browser/pre/",
 	"builtInExtensions": [],
 	"defaultChatAgent": {
-		"extensionId": "GitHub.copilot",
-		"chatExtensionId": "GitHub.copilot-chat",
-		"chatExtensionOutputId": "GitHub.copilot-chat.GitHub Copilot Chat.log",
-		"chatExtensionOutputExtensionStateCommand": "github.copilot.debug.extensionState",
-		"documentationUrl": "https://aka.ms/github-copilot-overview",
-		"termsStatementUrl": "https://aka.ms/github-copilot-terms-statement",
-		"privacyStatementUrl": "https://aka.ms/github-copilot-privacy-statement",
-		"skusDocumentationUrl": "https://aka.ms/github-copilot-plans",
-		"optimizeUsageDocumentationUrl": "https://aka.ms/token-usage-tips",
-		"publicCodeMatchesUrl": "https://aka.ms/github-copilot-match-public-code",
-		"managePlanUrl": "https://aka.ms/github-copilot-manage-plan",
-		"upgradePlanUrl": "https://aka.ms/github-copilot-upgrade-plan",
-		"signUpUrl": "https://aka.ms/github-sign-up",
+		"extensionId": "norris.writer",
+		"chatExtensionId": "norris.writer.chat",
+		"chatExtensionOutputId": "norris.writer.chat.log",
+		"chatExtensionOutputExtensionStateCommand": "norrisWriter.openChat",
+		"documentationUrl": "https://github.com/dave-norris/norris-writer",
+		"termsStatementUrl": "https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt",
+		"privacyStatementUrl": "https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt",
+		"skusDocumentationUrl": "https://github.com/dave-norris/norris-writer",
+		"optimizeUsageDocumentationUrl": "https://github.com/dave-norris/norris-writer",
+		"publicCodeMatchesUrl": "https://github.com/dave-norris/norris-writer",
+		"managePlanUrl": "https://github.com/dave-norris/norris-writer",
+		"upgradePlanUrl": "https://github.com/dave-norris/norris-writer",
+		"signUpUrl": "https://github.com/dave-norris/norris-writer",
 		"provider": {
 			"default": {
-				"id": "github",
-				"name": "GitHub"
+				"id": "norris",
+				"name": "Norris Writer"
 			},
 			"enterprise": {
-				"id": "github-enterprise",
-				"name": "GHE"
+				"id": "norris",
+				"name": "Norris Writer"
 			},
 			"google": {
-				"id": "google",
-				"name": "Google"
+				"id": "norris",
+				"name": "Norris Writer"
 			},
 			"apple": {
-				"id": "apple",
-				"name": "Apple"
+				"id": "norris",
+				"name": "Norris Writer"
 			}
 		},
-		"providerExtensionId": "vscode.github-authentication",
-		"providerUriSetting": "github-enterprise.uri",
-		"providerScopes": [
-			[
-				"read:user",
-				"user:email",
-				"repo",
-				"workflow"
-			],
-			[
-				"user:email"
-			],
-			[
-				"read:user"
-			]
-		],
-		"entitlementUrl": "https://api.github.com/copilot_internal/user",
-		"entitlementSignupLimitedUrl": "https://api.github.com/copilot_internal/subscribe_limited_user",
-		"chatQuotaExceededContext": "github.copilot.chat.quotaExceeded",
-		"completionsQuotaExceededContext": "github.copilot.completions.quotaExceeded",
-		"walkthroughCommand": "github.copilot.open.walkthrough",
-		"completionsMenuCommand": "github.copilot.toggleStatusMenu",
-		"chatRefreshTokenCommand": "github.copilot.refreshToken",
-		"generateCommitMessageCommand": "github.copilot.git.generateCommitMessage",
-		"resolveMergeConflictsCommand": "github.copilot.git.resolveMergeConflicts",
-		"completionsAdvancedSetting": "github.copilot.advanced",
-		"completionsEnablementSetting": "github.copilot.enable",
-		"nextEditSuggestionsSetting": "github.copilot.nextEditSuggestions.enabled",
-		"tokenEntitlementUrl": "https://api.github.com/copilot_internal/v2/token",
-		"mcpRegistryDataUrl": "https://api.github.com/copilot/mcp_registry",
-		"managedSettingsUrl": "https://api.github.com/copilot_internal/managed_settings"
+		"providerExtensionId": "norris.writer",
+		"providerUriSetting": "norrisWriter.ai.endpoint",
+		"providerScopes": [],
+		"entitlementUrl": "",
+		"entitlementSignupLimitedUrl": "",
+		"chatQuotaExceededContext": "norrisWriter.chat.quotaExceeded",
+		"completionsQuotaExceededContext": "norrisWriter.completions.quotaExceeded",
+		"walkthroughCommand": "norrisWriter.openChat",
+		"completionsMenuCommand": "norrisWriter.openChat",
+		"chatRefreshTokenCommand": "norrisWriter.openChat",
+		"generateCommitMessageCommand": "norrisWriter.openChat",
+		"resolveMergeConflictsCommand": "norrisWriter.openChat",
+		"completionsAdvancedSetting": "norrisWriter.ai.enabled",
+		"completionsEnablementSetting": "norrisWriter.ai.enabled",
+		"nextEditSuggestionsSetting": "norrisWriter.ai.enabled",
+		"tokenEntitlementUrl": "",
+		"mcpRegistryDataUrl": "",
+		"managedSettingsUrl": ""
 	},
-	"trustedExtensionAuthAccess": {
-		"github": [
-			"GitHub.copilot-chat"
-		],
-		"github-enterprise": [
-			"GitHub.copilot-chat"
-		]
-	},
+	"trustedExtensionAuthAccess": {},
 	"onboardingKeymaps": [
 		{
 			"id": "vscode",

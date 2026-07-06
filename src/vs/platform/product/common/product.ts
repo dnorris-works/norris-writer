@@ -71,16 +71,16 @@ else {
 			licenseUrl: 'https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt',
 			serverLicenseUrl: 'https://github.com/dave-norris/norris-writer/blob/main/LICENSE.txt',
 			defaultChatAgent: {
-				extensionId: 'GitHub.copilot',
-				chatExtensionId: 'GitHub.copilot-chat',
+				extensionId: 'norris.writer',
+				chatExtensionId: 'norris.writer.chat',
 				provider: {
 					default: {
-						id: 'github',
-						name: 'GitHub',
+						id: 'norris',
+						name: 'Norris Writer',
 					},
 					enterprise: {
-						id: 'github-enterprise',
-						name: 'GitHub Enterprise',
+						id: 'norris',
+						name: 'Norris Writer',
 					}
 				},
 				providerScopes: []

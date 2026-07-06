@@ -13,11 +13,6 @@ import { ICommandService } from '../../../../platform/commands/common/commands.j
 import { ServicesAccessor } from '../../../../platform/instantiation/common/instantiation.js';
 import { IQuickInputService } from '../../../../platform/quickinput/common/quickInput.js';
 import { CHAT_OPEN_ACTION_ID } from '../../chat/browser/actions/chatActions.js';
-import { MANAGE_CHAT_COMMAND_ID } from '../../chat/common/constants.js';
-import { ILanguageModelsService } from '../../chat/common/languageModels.js';
-
-const OPENROUTER_VENDOR = 'openrouter';
-const OPENROUTER_GROUP = 'OpenRouter';
 
 const NOVEL_GITIGNORE = [
 	'.norris-writer/',
@@ -142,7 +137,7 @@ registerAction2(class NorrisConfigureOpenRouterAction extends Action2 {
 	constructor() {
 		super({
 			id: NORRIS_CONFIGURE_OPENROUTER_COMMAND_ID,
-			title: localize2('norrisWriter.configureOpenRouter', 'Configure OpenRouter...'),
+			title: localize2('norrisWriter.configureOpenRouter', 'Configure AI Provider...'),
 			category: localize2('norrisWriter.category', 'Norris Writer'),
 			f1: true,
 		});
@@ -150,9 +145,6 @@ registerAction2(class NorrisConfigureOpenRouterAction extends Action2 {
 
 	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
-		const languageModelsService = accessor.get(ILanguageModelsService);
-
-		await commandService.executeCommand(MANAGE_CHAT_COMMAND_ID);
-		await languageModelsService.openLanguageModelsProviderGroupSettings(OPENROUTER_VENDOR, OPENROUTER_GROUP);
+		await commandService.executeCommand(CHAT_OPEN_ACTION_ID);
 	}
 });

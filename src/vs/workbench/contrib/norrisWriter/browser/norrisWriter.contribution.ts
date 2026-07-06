@@ -13,7 +13,7 @@ import { WORKSPACE_TRUST_ENABLED } from '../../../services/workspaces/common/wor
 import { ChatConfiguration } from '../../chat/common/constants.js';
 import './norrisWriterActions.js';
 import './norrisWriterWordCount.js';
-import './norrisWriterAiSetup.js';
+import './norrisWriterChatPlaceholder.js';
 
 Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultConfigurations([{
 	overrides: {
@@ -28,9 +28,7 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		'zenMode.hideActivityBar': false,
 		'norrisWriter.wordCount.enabled': true,
 		[WORKSPACE_TRUST_ENABLED]: false,
-		'chat.allowAnonymousAccess': false,
 		[ChatConfiguration.TitleBarSignInEnabled]: false,
-		'github.copilot.enable': false,
 	},
 	source: 'norrisWriterDefaults'
 }]);

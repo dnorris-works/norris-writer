@@ -192,7 +192,7 @@ export const startEntries: GettingStartedStartEntryContent = [
 
 const Button = (title: string, href: string) => `[${title}](${href})`;
 
-const OpenRouterSetupButton = Button(localize('setupOpenRouterButton', "Configure OpenRouter"), `command:norrisWriter.configureOpenRouter`);
+const OpenChatButton = Button(localize('setupAiButton', "Open Chat"), 'command:norrisWriter.openChat');
 
 export const walkthroughs: GettingStartedWalkthroughContent = [
 	{
@@ -208,21 +208,11 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 			type: 'steps',
 			steps: [
 				{
-					id: 'openRouterSetup',
-					title: localize('gettingStarted.openRouterSetup.title', "Connect OpenRouter"),
-					description: localize('gettingStarted.openRouterSetup.description.interpolated', "Add your OpenRouter API key to chat with AI while you write. No GitHub account required.\n{0}", OpenRouterSetupButton),
-					when: '!chatSetupHidden && !chatSetupDisabledInWorkspace && !github.copilot.hasByokModels',
+					id: 'openChatPlaceholder',
+					title: localize('gettingStarted.openRouterSetup.title', "Try the chat panel"),
+					description: localize('gettingStarted.openRouterSetup.description.interpolated', "Open chat to preview the writing assistant. Norris Writer will connect to your own AI provider in a future update.\n{0}", OpenChatButton),
 					media: {
 						type: 'svg', altText: 'AI writing assistant', path: 'multi-file-edits.svg'
-					},
-				},
-				{
-					id: 'openChatAfterSetup',
-					title: localize('gettingStarted.openRouterChat.title', "Start writing with AI"),
-					description: localize('gettingStarted.openRouterChat.description.interpolated', "Open chat to brainstorm, draft, and revise your manuscript.\n{0}", Button(localize('openChat', "Open Chat"), 'command:norrisWriter.openChat')),
-					when: 'chatSetupCompleted && github.copilot.hasByokModels',
-					media: {
-						type: 'svg', altText: 'Chat', path: 'learn.svg'
 					},
 				},
 				{
