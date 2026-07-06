@@ -313,7 +313,7 @@ if (import.meta.main) {
 	});
 
 	if (process.argv.length > 2) {
-		hygiene(process.argv.slice(2)).on('error', (err: Error) => {
+		hygiene(process.argv.slice(2), false).on('error', (err: Error) => {
 			console.error();
 			console.error(err);
 			process.exit(1);
@@ -347,7 +347,7 @@ if (import.meta.main) {
 						.then(
 							(vinyls) => {
 								return new Promise<void>((c, e) =>
-									hygiene(es.readArray(vinyls).pipe(filter(Array.from(all))))
+									hygiene(es.readArray(vinyls).pipe(filter(Array.from(all))), false)
 										.on('end', () => c())
 										.on('error', e)
 								);
