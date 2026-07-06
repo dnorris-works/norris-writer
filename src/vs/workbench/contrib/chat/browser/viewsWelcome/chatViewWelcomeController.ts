@@ -92,6 +92,11 @@ export class ChatViewWelcomeController extends Disposable {
 					this.render(descriptors);
 				}
 			}));
+		} else {
+			this.renderDisposables.clear();
+			dom.clearNode(this.element!);
+			this.container.classList.toggle('chat-view-welcome-visible', false);
+			this._isShowingWelcome.set(false, undefined);
 		}
 	}
 

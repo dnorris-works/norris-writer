@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Disposable } from '../../../../base/common/lifecycle.js';
+import { IChatEntitlementService } from '../../../services/chat/common/chatEntitlementService.js';
 import { localize2 } from '../../../../nls.js';
 import { Action2, registerAction2 } from '../../../../platform/actions/common/actions.js';
 import { IConfigurationService } from '../../../../platform/configuration/common/configuration.js';
@@ -28,6 +29,9 @@ class TokenMixContribution extends Disposable implements IWorkbenchContribution 
 
 	constructor(
 		@ILanguageModelsService languageModelsService: ILanguageModelsService,
+		@ITokenMixCredentialService credentialService: ITokenMixCredentialService,
+		@IChatEntitlementService chatEntitlementService: IChatEntitlementService,
+		@IConfigurationService configurationService: IConfigurationService,
 		@IInstantiationService instantiationService: IInstantiationService,
 	) {
 		super();
@@ -45,6 +49,28 @@ class TokenMixContribution extends Disposable implements IWorkbenchContribution 
 		languageModelsService.deltaLanguageModelChatProviderDescriptors([vendorDescriptor], []);
 		this._register({ dispose: () => languageModelsService.deltaLanguageModelChatProviderDescriptors([], [vendorDescriptor]) });
 		this._register(languageModelsService.registerLanguageModelProvider(TOKENMIX_VENDOR_ID, provider));
+
+		const refreshModels = async () => {
+			if (!configurationService.getValue<boolean>(TokenMixConfiguration.Enabled)) {
+				return;
+			}
+			if (!(await credentialService.hasApiKey())) {
+				return;
+			}
+			chatEntitlementService.markSetupCompleted();
+			await languageModelsService.selectLanguageModels({ vendor: TOKENMIX_VENDOR_ID });
+		};
+
+		this._register(credentialService.onDidChange(() => { refreshModels(); }));
+		this._register(configurationService.onDidChangeConfiguration(e => {
+			if (e.affectsConfiguration(TokenMixConfiguration.Enabled)
+				|| e.affectsConfiguration(TokenMixConfiguration.ApiKey)
+				|| e.affectsConfiguration(TokenMixConfiguration.BaseUrl)
+				|| e.affectsConfiguration(TokenMixConfiguration.DefaultModel)) {
+				refreshModels();
+			}
+		}));
+		refreshModels();
 	}
 }
 

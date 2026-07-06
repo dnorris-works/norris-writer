@@ -13,7 +13,7 @@ import { ChatEntitlementContextKeys } from '../../../services/chat/common/chatEn
 import { IExtensionService } from '../../../services/extensions/common/extensions.js';
 import { ChatContextKeys } from '../common/actions/chatContextKeys.js';
 import { ChatConfiguration } from '../common/constants.js';
-import { COPILOT_VENDOR_ID } from '../common/languageModels.js';
+import { COPILOT_VENDOR_ID, ILanguageModelsService } from '../common/languageModels.js';
 import { ILanguageModelsConfigurationService } from '../common/languageModelsConfiguration.js';
 
 /**
@@ -50,6 +50,7 @@ export class HasByokModelsContribution extends Disposable implements IWorkbenchC
 
 	constructor(
 		@ILanguageModelsConfigurationService private readonly _languageModelsConfigurationService: ILanguageModelsConfigurationService,
+		@ILanguageModelsService private readonly _languageModelsService: ILanguageModelsService,
 		@IContextKeyService private readonly _contextKeyService: IContextKeyService,
 		@IConfigurationService private readonly _configurationService: IConfigurationService,
 		@IStorageService private readonly _storageService: IStorageService,
@@ -80,6 +81,8 @@ export class HasByokModelsContribution extends Disposable implements IWorkbenchC
 			Event.filter(this._configurationService.onDidChangeConfiguration, e => e.affectsConfiguration(ChatConfiguration.AIDisabled)),
 			Event.filter(this._contextKeyService.onDidChangeContext, e => e.affectsSome(HasByokModelsContribution.TRACKED_KEYS)),
 			this._languageModelsConfigurationService.onDidChangeLanguageModelGroups,
+			this._languageModelsService.onDidChangeLanguageModelVendors,
+			this._languageModelsService.onDidChangeLanguageModels,
 		)(() => this._update()));
 	}
 
@@ -107,15 +110,14 @@ export class HasByokModelsContribution extends Disposable implements IWorkbenchC
 			return;
 		}
 
-		const hasByokVendor = this._languageModelsConfigurationService.getLanguageModelsProviderGroups().some(g => g.vendor !== COPILOT_VENDOR_ID);
+		const hasByokVendor = this._languageModelsConfigurationService.getLanguageModelsProviderGroups().some(g => g.vendor !== COPILOT_VENDOR_ID)
+			|| this._languageModelsService.getVendors().some(v => v.vendor !== COPILOT_VENDOR_ID);
 		if (hasByokVendor) {
 			this._setResult(true);
 			return;
 		}
 
-		// Pre-registration only: trust the user-selectable signal as an optimistic positive.
-		// Post-registration it can be stale (model cache lags behind group removal), so ignore.
-		if (!this._extensionsRegistered && this._contextKeyService.getContextKeyValue<boolean>(ChatContextKeys.nonCopilotLanguageModelsAreUserSelectable.key)) {
+		if (this._contextKeyService.getContextKeyValue<boolean>(ChatContextKeys.nonCopilotLanguageModelsAreUserSelectable.key)) {
 			this._setResult(true);
 			return;
 		}

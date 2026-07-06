@@ -10,8 +10,21 @@ export const enum NorrisWriterEditorAppearance {
 
 export const NorrisWriterEditorAppearanceSetting = 'norrisWriter.editor.appearance';
 
-/** Warm cream page with black ink — used when appearance is `paper`. */
-export const NORRIS_WRITER_PAPER_EDITOR_COLORS: Readonly<Record<string, string>> = {
+export const NORRIS_WRITER_PAPER_EDITOR_CLASS = 'norris-paper-editor';
+
+/** Legacy keys written to workbench.colorCustomizations — stripped on startup. */
+export const NORRIS_WRITER_LEGACY_PAPER_COLOR_KEYS: readonly string[] = [
+	'editor.background',
+	'editor.foreground',
+	'editorLineNumber.foreground',
+	'editor.lineHighlightBackground',
+	'editor.selectionBackground',
+	'editor.inactiveSelectionBackground',
+	'editorCursor.foreground',
+	'editorWidget.background',
+];
+
+export const NORRIS_WRITER_LEGACY_PAPER_COLOR_VALUES: Readonly<Record<string, string>> = {
 	'editor.background': '#FAF8F5',
 	'editor.foreground': '#000000',
 	'editorLineNumber.foreground': '#8A8278',
@@ -22,8 +35,10 @@ export const NORRIS_WRITER_PAPER_EDITOR_COLORS: Readonly<Record<string, string>>
 	'editorWidget.background': '#FAF8F5',
 };
 
-export const NORRIS_WRITER_PAPER_CSS_VARIABLES: Readonly<Record<string, string>> = {
-	'--vscode-editor-background': '#FAF8F5',
-	'--vscode-editor-foreground': '#000000',
-	'--vscode-foreground': '#000000',
-};
+export function isNorrisWriterPaperAppearance(value: unknown): boolean {
+	return value === NorrisWriterEditorAppearance.Paper;
+}
+
+export function isNorrisWriterPaperLanguage(languageId: string | undefined): boolean {
+	return languageId === 'markdown';
+}

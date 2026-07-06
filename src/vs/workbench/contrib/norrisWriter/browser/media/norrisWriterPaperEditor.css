@@ -1,0 +1,24 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) David Norris. All rights reserved.
+ *  Licensed under the MIT License. See LICENSE.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.monaco-editor.norris-paper-editor {
+	--vscode-editor-background: #FAF8F5;
+	--vscode-editor-foreground: #000000;
+	--vscode-editor-lineHighlightBackground: #F3EDE3;
+	--vscode-editor-selectionBackground: #E5D9C8;
+	--vscode-editor-inactiveSelectionBackground: #EDE4D6;
+	--vscode-editorCursor-foreground: #000000;
+	--vscode-editorLineNumber-foreground: #8A8278;
+}
+
+.monaco-editor.norris-paper-editor .margin,
+.monaco-editor.norris-paper-editor .monaco-editor-background {
+	background-color: #FAF8F5;
+}
+
+.monaco-editor.norris-paper-editor .view-lines,
+.monaco-editor.norris-paper-editor .view-line {
+	color: #000000;
+}

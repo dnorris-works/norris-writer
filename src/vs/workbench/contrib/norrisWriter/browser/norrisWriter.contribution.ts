@@ -12,7 +12,6 @@ import { LifecyclePhase } from '../../../services/lifecycle/common/lifecycle.js'
 import { WORKSPACE_TRUST_ENABLED } from '../../../services/workspaces/common/workspaceTrust.js';
 import { ChatConfiguration } from '../../chat/common/constants.js';
 import {
-	NORRIS_WRITER_PAPER_EDITOR_COLORS,
 	NorrisWriterEditorAppearance,
 	NorrisWriterEditorAppearanceSetting,
 } from '../common/editorAppearanceConstants.js';
@@ -24,6 +23,7 @@ import {
 import './norrisWriterActions.js';
 import './norrisWriterEditorAppearance.js';
 import './norrisWriterWordCount.js';
+import './norrisWriterChatIntegration.js';
 import './norrisWriterChatPlaceholder.js';
 import './norrisWriterMarkdownFormatting.js';
 import './tokenMixContribution.js';
@@ -42,7 +42,6 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		'norrisWriter.wordCount.enabled': true,
 		'norrisWriter.markdown.alwaysRendered': true,
 		[NorrisWriterEditorAppearanceSetting]: NorrisWriterEditorAppearance.Paper,
-		'workbench.colorCustomizations': { ...NORRIS_WRITER_PAPER_EDITOR_COLORS },
 		'workbench.editorAssociations': {
 			'*.md': 'vscode.markdown.editor',
 		},
@@ -51,6 +50,9 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		[TokenMixConfiguration.DefaultModel]: TOKENMIX_DEFAULT_MODEL,
 		[WORKSPACE_TRUST_ENABLED]: false,
 		[ChatConfiguration.TitleBarSignInEnabled]: false,
+		[ChatConfiguration.DefaultNewSessionMode]: 'ask',
+		[ChatConfiguration.AIDisabled]: false,
+		[ChatConfiguration.ChatViewSessionsEnabled]: false,
 	},
 	source: 'norrisWriterDefaults'
 }]);
@@ -89,12 +91,12 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerConfigurat
 			enum: [NorrisWriterEditorAppearance.FollowTheme, NorrisWriterEditorAppearance.Paper],
 			enumDescriptions: [
 				localize('norrisWriter.editor.appearance.followTheme', "Use the active color theme for editor background and text."),
-				localize('norrisWriter.editor.appearance.paper', "Use a warm cream page with black text in editors, ignoring the theme."),
+				localize('norrisWriter.editor.appearance.paper', "Use a warm cream page with black text in manuscript editors only, ignoring the theme."),
 			],
 			default: NorrisWriterEditorAppearance.Paper,
 			order: 3,
 			title: localize('norrisWriter.editor.appearance.title', "Editor appearance"),
-			description: localize('norrisWriter.editor.appearance', "Controls whether manuscript editors use the color theme or a fixed cream paper style with black text."),
+			description: localize('norrisWriter.editor.appearance', "Controls whether Markdown manuscript editors use the color theme or a fixed cream paper style with black text. Does not change Settings, sidebars, or other workbench UI."),
 		},
 		[TokenMixConfiguration.Enabled]: {
 			type: 'boolean',

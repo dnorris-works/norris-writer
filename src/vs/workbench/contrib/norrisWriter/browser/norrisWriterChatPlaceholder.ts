@@ -184,10 +184,15 @@ class NorrisWriterChatContribution extends Disposable implements IWorkbenchContr
 			isDefault: true,
 			isCore: true,
 			isDynamic: true,
-			metadata: {},
+			metadata: {
+				additionalWelcomeMessage: localize(
+					'norrisWriter.chatAgent.welcomeMessage',
+					'Ask me to brainstorm, draft, revise, or polish your fiction. Configure TokenMix in Settings if you have not already.',
+				),
+			},
 			slashCommands: [],
 			locations: [ChatAgentLocation.Chat],
-			modes: [ChatModeKind.Ask],
+			modes: [ChatModeKind.Ask, ChatModeKind.Agent, ChatModeKind.Edit],
 			disambiguation: [],
 		}));
 		this._register(chatAgentService.registerAgentImplementation(NORRIS_WRITER_AGENT_ID, agent));
@@ -195,4 +200,4 @@ class NorrisWriterChatContribution extends Disposable implements IWorkbenchContr
 }
 
 Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench)
-	.registerWorkbenchContribution(NorrisWriterChatContribution, LifecyclePhase.Eventually);
+	.registerWorkbenchContribution(NorrisWriterChatContribution, LifecyclePhase.Restored);
