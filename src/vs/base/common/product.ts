@@ -206,6 +206,12 @@ export interface IProductConfiguration {
 	readonly serverApplicationName: string;
 	readonly serverDataFolderName?: string;
 
+	/** When false, the app cannot be driven from the terminal (GUI launch only). Defaults to true. */
+	readonly enableCli?: boolean;
+
+	/** When false, developer IDE surfaces (debug, terminal panel, etc.) are not loaded. Defaults to true. */
+	readonly enableDevFeatures?: boolean;
+
 	readonly tunnelApplicationName?: string;
 	readonly tunnelApplicationConfig?: ITunnelApplicationConfig;
 

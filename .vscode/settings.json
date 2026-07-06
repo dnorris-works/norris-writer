@@ -46,7 +46,6 @@
 		"**/*.tsbuildinfo": true,
 		"**/.DS_Store": true,
 		".vscode-test": true,
-		"cli/target": true,
 		"build/**/*.js.map": true,
 		"build/**/*.js": {
 			"when": "$(basename).ts"
@@ -78,7 +77,6 @@
 	// --- Search ---
 	"search.exclude": {
 		"**/node_modules": true,
-		"cli/target/**": true,
 		".build/**": true,
 		"out/**": true,
 		"out-build/**": true,
@@ -191,7 +189,7 @@
 	"emmet.excludeLanguages": [],
 	"gulp.autoDetect": "off",
 	"rust-analyzer.linkedProjects": [
-		"cli/Cargo.toml"
+		"build/win32/Cargo.toml"
 	],
 	"conventionalCommits.scopes": [
 		"tree",

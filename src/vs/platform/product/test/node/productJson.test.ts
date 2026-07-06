@@ -34,7 +34,7 @@ suite('product.json - Norris Writer Identity', () => {
 			sharedDataFolderName: product['sharedDataFolderName'],
 			serverApplicationName: product['serverApplicationName'],
 			serverDataFolderName: product['serverDataFolderName'],
-			tunnelApplicationName: product['tunnelApplicationName'],
+			enableCli: product['enableCli'],
 			urlProtocol: product['urlProtocol'],
 			linuxIconName: product['linuxIconName'],
 		}, {
@@ -45,10 +45,14 @@ suite('product.json - Norris Writer Identity', () => {
 			sharedDataFolderName: '.norris-writer-shared',
 			serverApplicationName: 'norris-writer-server',
 			serverDataFolderName: '.norris-writer-server',
-			tunnelApplicationName: 'norris-writer-tunnel',
+			enableCli: false,
 			urlProtocol: 'norris-writer',
 			linuxIconName: 'norris-writer',
 		});
+	});
+
+	test('tunnel CLI is not configured', () => {
+		assert.strictEqual(product['tunnelApplicationName'], undefined, 'tunnelApplicationName should be unset for a GUI-only app');
 	});
 
 	test('Windows App IDs are valid Inno Setup GUID format', () => {

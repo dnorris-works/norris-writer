@@ -41,6 +41,49 @@ function shouldSpawnCliProcess(argv: NativeParsedArgs): boolean {
 		|| !!argv['telemetry'];
 }
 
+function isCliDisabled(): boolean {
+	return product.enableCli === false && !process.env['VSCODE_DEV'];
+}
+
+function isRestrictedCliUsage(args: NativeParsedArgs): boolean {
+	if (args.help || args.version || args.telemetry || args.status) {
+		return true;
+	}
+	if (args['locate-shell-integration-path']) {
+		return true;
+	}
+	if (shouldSpawnCliProcess(args)) {
+		return true;
+	}
+	if (args['file-write']) {
+		return true;
+	}
+	for (const subcommand of NATIVE_CLI_COMMANDS) {
+		if (args[subcommand]) {
+			return true;
+		}
+	}
+	if (args._.length > 0) {
+		return true;
+	}
+	if (args['folder-uri']?.length || args['file-uri']?.length || args._urls?.length) {
+		return true;
+	}
+	if (args.diff || args.merge || args.goto || args.wait || args.add || args.remove) {
+		return true;
+	}
+	if (args.chat) {
+		return true;
+	}
+	if (args['transient'] || args['prof-startup']) {
+		return true;
+	}
+	if (hasStdinWithoutTty() && args._.some(arg => arg === '-')) {
+		return true;
+	}
+	return false;
+}
+
 export async function main(argv: string[]): Promise<void> {
 	let args: NativeParsedArgs;
 
@@ -49,6 +92,16 @@ export async function main(argv: string[]): Promise<void> {
 	} catch (err) {
 		console.error(err.message);
 		return;
+	}
+
+	if (isCliDisabled()) {
+		if (isRestrictedCliUsage(args)) {
+			console.error(`${product.nameLong} is a desktop application and does not support command-line usage. Launch it from your Applications folder or Dock.`);
+			return;
+		}
+		// Strip all CLI arguments and launch the GUI only.
+		argv = argv.slice(0, 2);
+		args = parseCLIProcessArgv(argv);
 	}
 
 	for (const subcommand of NATIVE_CLI_COMMANDS) {
@@ -68,18 +121,13 @@ export async function main(argv: string[]): Promise<void> {
 
 			const tunnelArgs = argv.slice(argv.indexOf(subcommand) + 1); // all arguments behind `tunnel`
 			return new Promise((resolve, reject) => {
-				let tunnelProcess: ChildProcess;
 				const stdio: StdioOptions = ['ignore', 'pipe', 'pipe'];
-				if (process.env['VSCODE_DEV']) {
-					tunnelProcess = spawn('cargo', ['run', '--', subcommand, ...tunnelArgs], { cwd: join(getAppRoot(), 'cli'), stdio, env });
-				} else {
-					const appPath = process.platform === 'darwin'
-						// ./Contents/MacOS/Code => ./Contents/Resources/app/bin/code-tunnel-insiders
-						? join(dirname(dirname(process.execPath)), 'Resources', 'app')
-						: dirname(process.execPath);
-					const tunnelCommand = join(appPath, 'bin', `${product.tunnelApplicationName}${isWindows ? '.exe' : ''}`);
-					tunnelProcess = spawn(tunnelCommand, [subcommand, ...tunnelArgs], { cwd: cwd(), stdio, env });
-				}
+				const appPath = process.platform === 'darwin'
+					// ./Contents/MacOS/Code => ./Contents/Resources/app/bin/code-tunnel-insiders
+					? join(dirname(dirname(process.execPath)), 'Resources', 'app')
+					: dirname(process.execPath);
+				const tunnelCommand = join(appPath, 'bin', `${product.tunnelApplicationName}${isWindows ? '.exe' : ''}`);
+				const tunnelProcess = spawn(tunnelCommand, [subcommand, ...tunnelArgs], { cwd: cwd(), stdio, env });
 
 				tunnelProcess.stdout!.pipe(process.stdout);
 				tunnelProcess.stderr!.pipe(process.stderr);

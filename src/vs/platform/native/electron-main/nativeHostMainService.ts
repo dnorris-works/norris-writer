@@ -486,6 +486,9 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 	//#region macOS Shell Command
 
 	async installShellCommand(windowId: number | undefined): Promise<void> {
+		if (this.productService.enableCli === false) {
+			throw new Error(`${this.productService.nameLong} does not support shell commands.`);
+		}
 		const { source, target } = await this.getShellCommandLink();
 
 		// Only install unless already existing
@@ -529,6 +532,9 @@ export class NativeHostMainService extends Disposable implements INativeHostMain
 	}
 
 	async uninstallShellCommand(windowId: number | undefined): Promise<void> {
+		if (this.productService.enableCli === false) {
+			throw new Error(`${this.productService.nameLong} does not support shell commands.`);
+		}
 		const { source } = await this.getShellCommandLink();
 
 		try {

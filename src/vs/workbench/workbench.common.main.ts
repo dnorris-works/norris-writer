@@ -235,14 +235,17 @@ import './contrib/chat/browser/chatSessions/chatSessions.contribution.js';
 import './contrib/chat/browser/contextContrib/chatContext.contribution.js';
 import './contrib/imageCarousel/browser/imageCarousel.contribution.js';
 
+// Norris Writer
+import './contrib/norrisWriter/browser/norrisWriter.contribution.js';
+
 // Interactive
 import './contrib/interactive/browser/interactive.contribution.js';
 
-// repl
-import './contrib/replNotebook/browser/repl.contribution.js';
+// repl — Norris Writer: disabled (notebook REPL)
+// import './contrib/replNotebook/browser/repl.contribution.js';
 
-// Testing
-import './contrib/testing/browser/testing.contribution.js';
+// Testing — Norris Writer: disabled
+// import './contrib/testing/browser/testing.contribution.js';
 
 // Logs
 import './contrib/logs/common/logs.contribution.js';
@@ -280,19 +283,19 @@ import './contrib/scm/browser/scm.contribution.js';
 import './contrib/scm/browser/quickDiff.contribution.js';
 import './contrib/scm/browser/scm.service.contribution.js';
 
-// Debug
-import './contrib/debug/browser/debug.contribution.js';
-import './contrib/debug/browser/debugEditorContribution.js';
-import './contrib/debug/browser/breakpointEditorContribution.js';
-import './contrib/debug/browser/callStackEditorContribution.js';
-import './contrib/debug/browser/repl.js';
-import './contrib/debug/browser/debugViewlet.js';
+// Debug — Norris Writer: disabled
+// import './contrib/debug/browser/debug.contribution.js';
+// import './contrib/debug/browser/debugEditorContribution.js';
+// import './contrib/debug/browser/breakpointEditorContribution.js';
+// import './contrib/debug/browser/callStackEditorContribution.js';
+// import './contrib/debug/browser/repl.js';
+// import './contrib/debug/browser/debugViewlet.js';
 
-// Markers
-import './contrib/markers/browser/markers.contribution.js';
+// Markers — Norris Writer: disabled
+// import './contrib/markers/browser/markers.contribution.js';
 
-// Process Explorer
-import './contrib/processExplorer/browser/processExplorer.contribution.js';
+// Process Explorer — Norris Writer: disabled
+// import './contrib/processExplorer/browser/processExplorer.contribution.js';
 
 // Merge Editor
 import './contrib/mergeEditor/browser/mergeEditor.contribution.js';
@@ -318,19 +321,19 @@ import './contrib/customEditor/browser/customEditor.contribution.js';
 // External Uri Opener
 import './contrib/externalUriOpener/common/externalUriOpener.contribution.js';
 
-// Extensions Management
-import './contrib/extensions/browser/extensions.contribution.js';
-import './contrib/extensions/browser/extensionsViewlet.js';
+// Extensions Management — Norris Writer: disabled (no marketplace UI)
+// import './contrib/extensions/browser/extensions.contribution.js';
+// import './contrib/extensions/browser/extensionsViewlet.js';
 
 // Output View
 import './contrib/output/browser/output.contribution.js';
 import './contrib/output/browser/outputView.js';
 
-// Terminal
-import './contrib/terminal/terminal.all.js';
+// Terminal — Norris Writer: disabled (panel hidden; services may remain for AI)
+// import './contrib/terminal/terminal.all.js';
 
-// External terminal
-import './contrib/externalTerminal/browser/externalTerminal.contribution.js';
+// External terminal — Norris Writer: disabled
+// import './contrib/externalTerminal/browser/externalTerminal.contribution.js';
 
 // Relauncher
 import './contrib/relauncher/browser/relauncher.contribution.js';
@@ -338,12 +341,12 @@ import './contrib/relauncher/browser/relauncher.contribution.js';
 // Style Overrides (experimental)
 import './contrib/styleOverrides/browser/styleOverrides.contribution.js';
 
-// Tasks
-import './contrib/tasks/browser/task.contribution.js';
+// Tasks — Norris Writer: disabled
+// import './contrib/tasks/browser/task.contribution.js';
 
-// Remote
-import './contrib/remote/common/remote.contribution.js';
-import './contrib/remote/browser/remote.contribution.js';
+// Remote — Norris Writer: disabled
+// import './contrib/remote/common/remote.contribution.js';
+// import './contrib/remote/browser/remote.contribution.js';
 
 // Emmet
 import './contrib/emmet/browser/emmet.contribution.js';
@@ -378,9 +381,9 @@ import './contrib/themes/browser/themes.contribution.js';
 // Update
 import './contrib/update/browser/update.contribution.js';
 
-// Surveys
-import './contrib/surveys/browser/nps.contribution.js';
-import './contrib/surveys/browser/languageSurveys.contribution.js';
+// Surveys — Norris Writer: disabled
+// import './contrib/surveys/browser/nps.contribution.js';
+// import './contrib/surveys/browser/languageSurveys.contribution.js';
 
 // Welcome
 import './contrib/welcomeGettingStarted/browser/gettingStarted.contribution.js';
@@ -389,11 +392,11 @@ import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
 import './contrib/welcomeViews/common/viewsWelcome.contribution.js';
 import './contrib/welcomeViews/common/newFile.contribution.js';
 
-// Welcome Onboarding
-import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
+// Welcome Onboarding — Norris Writer: disabled (IDE onboarding overlay)
+// import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
 
-// Onboarding (scenario engine)
-import './contrib/onboarding/browser/onboarding.contribution.js';
+// Onboarding (scenario engine) — Norris Writer: disabled
+// import './contrib/onboarding/browser/onboarding.contribution.js';
 
 // Call Hierarchy
 import './contrib/callHierarchy/browser/callHierarchy.contribution.js';
@@ -414,8 +417,8 @@ import './contrib/languageStatus/browser/languageStatus.contribution.js';
 // Authentication
 import './contrib/authentication/browser/authentication.contribution.js';
 
-// User Data Sync
-import './contrib/userDataSync/browser/userDataSync.contribution.js';
+// User Data Sync — Norris Writer: disabled
+// import './contrib/userDataSync/browser/userDataSync.contribution.js';
 
 // User Data Profiles
 import './contrib/userDataProfile/browser/userDataProfile.contribution.js';
@@ -423,8 +426,8 @@ import './contrib/userDataProfile/browser/userDataProfile.contribution.js';
 // Continue Edit Session
 import './contrib/editSessions/browser/editSessions.contribution.js';
 
-// Remote Coding Agents
-import './contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js';
+// Remote Coding Agents — Norris Writer: disabled
+// import './contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js';
 
 // Code Actions
 import './contrib/codeActions/browser/codeActions.contribution.js';

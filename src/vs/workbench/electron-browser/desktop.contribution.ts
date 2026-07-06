@@ -62,8 +62,8 @@ import product from '../../platform/product/common/product.js';
 		});
 	}
 
-	// Actions: Install Shell Script (macOS only)
-	if (isMacintosh) {
+	// Actions: Install Shell Script (macOS only, when CLI is enabled)
+	if (isMacintosh && product.enableCli !== false) {
 		registerAction2(InstallShellScriptAction);
 		registerAction2(UninstallShellScriptAction);
 	}

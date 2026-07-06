@@ -11,7 +11,7 @@
  *  Covers (no network required):
  *    1. isSpdxStub truth table — true for all 17 known CG stub bodies, false for
  *       real short license bodies and license prose.
- *    2. parseCargoLock — extracts packages from cli/Cargo.lock + build/win32,
+ *    2. parseCargoLock — extracts packages from build/win32/Cargo.lock,
  *       skips workspace crates with no source, returns correct name/version for
  *       clap, jiff, slog, term.
  *    3. getCrateRepository — override map returns mirror URLs.
@@ -102,34 +102,24 @@ check('real: whitespace only', isSpdxStub('   \n  ') === false);
 console.log('parseCargoLock:');
 // Run from the oss dir (build/azure-pipelines/oss): repo root is three levels up.
 const repoRoot = path.resolve(process.cwd(), '..', '..', '..');
-const cliLockPath = path.join(repoRoot, 'cli', 'Cargo.lock');
 const win32LockPath = path.join(repoRoot, 'build', 'win32', 'Cargo.lock');
-
-const cliPkgs = parseCargoLock(fs.readFileSync(cliLockPath, 'utf8'));
-console.log(`  cli/Cargo.lock: ${cliPkgs.length} packages parsed`);
-check('cli: parsed a substantial number of packages (>300)', cliPkgs.length > 300);
-
-const cliNoSource = cliPkgs.filter(p => !p.source);
-const cliWithSource = cliPkgs.filter(p => p.source);
-console.log(`  cli/Cargo.lock: ${cliNoSource.length} workspace crates (no source), ${cliWithSource.length} with source`);
-check('cli: at least one workspace crate (no source) present', cliNoSource.length >= 1);
-check('cli: most crates have a source', cliWithSource.length > 300);
-
-const clap = cliPkgs.find(p => p.name === 'clap');
-check('cli: clap present with version + registry source', !!clap && /^\d/.test(clap!.version) && !!clap!.source);
-const jiff = cliPkgs.find(p => p.name === 'jiff');
-check('cli: jiff present with version + registry source', !!jiff && /^\d/.test(jiff!.version) && !!jiff!.source);
 
 const win32Pkgs = parseCargoLock(fs.readFileSync(win32LockPath, 'utf8'));
 console.log(`  build/win32/Cargo.lock: ${win32Pkgs.length} packages parsed`);
+check('win32: parsed a substantial number of packages (>50)', win32Pkgs.length > 50);
+
+const win32NoSource = win32Pkgs.filter(p => !p.source);
+const win32WithSource = win32Pkgs.filter(p => p.source);
+console.log(`  build/win32/Cargo.lock: ${win32NoSource.length} workspace crates (no source), ${win32WithSource.length} with source`);
+check('win32: most crates have a source', win32WithSource.length > 50);
 const slog = win32Pkgs.find(p => p.name === 'slog');
 check('win32: slog present with version', !!slog && /^\d/.test(slog!.version));
 const term = win32Pkgs.find(p => p.name === 'term');
 check('win32: term present with version', !!term && /^\d/.test(term!.version));
 
 // Sanity: no parsed package has a quote/bracket leaking into its fields.
-check('parse: no malformed names', cliPkgs.every(p => /^[A-Za-z0-9_.-]+$/.test(p.name)));
-check('parse: no malformed versions', cliPkgs.every(p => /^[0-9]/.test(p.version)));
+check('parse: no malformed names', win32Pkgs.every(p => /^[A-Za-z0-9_.-]+$/.test(p.name)));
+check('parse: no malformed versions', win32Pkgs.every(p => /^[0-9]/.test(p.version)));
 
 // -- 3. getCrateRepository override map ---------------------------------------
 console.log('getCrateRepository override map:');

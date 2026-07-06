@@ -121,12 +121,12 @@ import './contrib/files/electron-browser/fileActions.contribution.js';
 // CodeEditor Contributions
 import './contrib/codeEditor/electron-browser/codeEditor.contribution.js';
 
-// Debug
-import './contrib/debug/electron-browser/extensionHostDebugService.js';
+// Debug — Norris Writer: disabled
+// import './contrib/debug/electron-browser/extensionHostDebugService.js';
 
-// Extensions Management
-import './contrib/extensions/electron-browser/extensions.contribution.js';
-import './contrib/extensions/electron-browser/devtoolsExtensionHost.contribution.js';
+// Extensions Management — Norris Writer: disabled (marketplace UI)
+// import './contrib/extensions/electron-browser/extensions.contribution.js';
+// import './contrib/extensions/electron-browser/devtoolsExtensionHost.contribution.js';
 
 // Issues
 import './contrib/issue/electron-browser/issue.contribution.js';
@@ -134,14 +134,14 @@ import './contrib/issue/electron-browser/issue.contribution.js';
 // Surveys
 import './contrib/surveys/browser/survey.contribution.js';
 
-// Process Explorer
-import './contrib/processExplorer/electron-browser/processExplorer.contribution.js';
+// Process Explorer — Norris Writer: disabled
+// import './contrib/processExplorer/electron-browser/processExplorer.contribution.js';
 
-// Remote
-import './contrib/remote/electron-browser/remote.contribution.js';
+// Remote — Norris Writer: disabled
+// import './contrib/remote/electron-browser/remote.contribution.js';
 
-// Terminal
-import './contrib/terminal/electron-browser/terminal.contribution.js';
+// Terminal — Norris Writer: disabled
+// import './contrib/terminal/electron-browser/terminal.contribution.js';
 
 // Themes
 import './contrib/themes/browser/themes.test.contribution.js';
@@ -155,11 +155,11 @@ import './contrib/tags/electron-browser/tags.contribution.js';
 // Performance
 import './contrib/performance/electron-browser/performance.contribution.js';
 
-// Tasks
-import './contrib/tasks/electron-browser/taskService.js';
+// Tasks — Norris Writer: disabled
+// import './contrib/tasks/electron-browser/taskService.js';
 
-// External terminal
-import './contrib/externalTerminal/electron-browser/externalTerminal.contribution.js';
+// External terminal — Norris Writer: disabled
+// import './contrib/externalTerminal/electron-browser/externalTerminal.contribution.js';
 
 // Webview
 import './contrib/webview/electron-browser/webview.contribution.js';
@@ -179,12 +179,12 @@ import './contrib/mergeEditor/electron-browser/mergeEditor.contribution.js';
 // Multi Diff Editor
 import './contrib/multiDiffEditor/browser/multiDiffEditor.contribution.js';
 
-// Remote Tunnel
-import './contrib/remoteTunnel/electron-browser/remoteTunnel.contribution.js';
+// Remote Tunnel — Norris Writer: disabled
+// import './contrib/remoteTunnel/electron-browser/remoteTunnel.contribution.js';
 
 // Chat
 import './contrib/chat/electron-browser/chat.contribution.js';
-import './contrib/chat/electron-browser/tunnelHost.contribution.js';
+// import './contrib/chat/electron-browser/tunnelHost.contribution.js';
 
 // Copilot Voice
 import './contrib/agentsVoice/electron-browser/agentsVoiceNativeCommands.js';

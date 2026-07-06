@@ -451,16 +451,18 @@ export class RemoteTunnelService extends Disposable implements IRemoteTunnelServ
 						tunnelProcess.kill();
 					}
 				});
-				if (!this.environmentService.isBuilt) {
-					onOutput('Building tunnel CLI from sources and run\n', false);
-					onOutput(`${logLabel} Spawning: cargo run -- tunnel ${commandArgs.join(' ')}\n`, false);
-					tunnelProcess = spawn('cargo', ['run', '--', 'tunnel', ...commandArgs], { cwd: join(this.environmentService.appRoot, 'cli'), stdio, env: { ...process.env, RUST_BACKTRACE: '1', ...env } });
-				} else {
-					onOutput('Running tunnel CLI\n', false);
-					const tunnelCommand = this.getTunnelCommandLocation();
-					onOutput(`${logLabel} Spawning: ${tunnelCommand} tunnel ${commandArgs.join(' ')}\n`, false);
-					tunnelProcess = spawn(tunnelCommand, ['tunnel', ...commandArgs], { cwd: homedir(), stdio, env: { ...process.env, ...env } });
+				if (!this.productService.tunnelApplicationName) {
+					reject(new Error('Remote tunnel is not available'));
+					return;
 				}
+				if (!this.environmentService.isBuilt) {
+					reject(new Error('Remote tunnel is only available in built installs'));
+					return;
+				}
+				onOutput('Running tunnel CLI\n', false);
+				const tunnelCommand = this.getTunnelCommandLocation();
+				onOutput(`${logLabel} Spawning: ${tunnelCommand} tunnel ${commandArgs.join(' ')}\n`, false);
+				tunnelProcess = spawn(tunnelCommand, ['tunnel', ...commandArgs], { cwd: homedir(), stdio, env: { ...process.env, ...env } });
 
 				tunnelProcess.stdout!.pipe(new StreamSplitter('\n')).on('data', data => {
 					if (tunnelProcess) {
