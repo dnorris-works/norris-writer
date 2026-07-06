@@ -1,6 +1,6 @@
 {
-	"name": "Code - OSS",
-	"short_name": "Code- OSS",
+	"name": "Norris Writer",
+	"short_name": "Norris Writer",
 	"start_url": "/",
 	"lang": "en-US",
 	"display": "standalone",
