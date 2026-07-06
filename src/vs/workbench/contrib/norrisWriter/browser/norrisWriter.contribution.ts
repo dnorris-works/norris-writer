@@ -11,6 +11,11 @@ import { Extensions as WorkbenchExtensions, IWorkbenchContribution, IWorkbenchCo
 import { LifecyclePhase } from '../../../services/lifecycle/common/lifecycle.js';
 import { WORKSPACE_TRUST_ENABLED } from '../../../services/workspaces/common/workspaceTrust.js';
 import { ChatConfiguration } from '../../chat/common/constants.js';
+import {
+	TOKENMIX_DEFAULT_BASE_URL,
+	TOKENMIX_DEFAULT_MODEL,
+	TokenMixConfiguration,
+} from '../common/tokenMixConstants.js';
 import './norrisWriterActions.js';
 import './norrisWriterWordCount.js';
 import './norrisWriterChatPlaceholder.js';
@@ -28,6 +33,9 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		'zenMode.hideStatusBar': false,
 		'zenMode.hideActivityBar': false,
 		'norrisWriter.wordCount.enabled': true,
+		[TokenMixConfiguration.Enabled]: true,
+		[TokenMixConfiguration.BaseUrl]: TOKENMIX_DEFAULT_BASE_URL,
+		[TokenMixConfiguration.DefaultModel]: TOKENMIX_DEFAULT_MODEL,
 		[WORKSPACE_TRUST_ENABLED]: false,
 		[ChatConfiguration.TitleBarSignInEnabled]: false,
 	},
@@ -47,13 +55,47 @@ Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench)
 
 Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerConfiguration({
 	id: 'norrisWriter',
+	order: 100,
 	title: localize('norrisWriterConfigurationTitle', "Norris Writer"),
 	type: 'object',
 	properties: {
 		'norrisWriter.wordCount.enabled': {
 			type: 'boolean',
 			default: true,
+			order: 1,
 			description: localize('norrisWriter.wordCount.enabled', "Show word count in the status bar for the active document."),
+		},
+		[TokenMixConfiguration.Enabled]: {
+			type: 'boolean',
+			default: true,
+			order: 10,
+			tags: ['tokenMix'],
+			title: localize('norrisWriter.tokenMix.enabled.title', "TokenMix: Enabled"),
+			description: localize('norrisWriter.tokenMix.enabled', "Enable TokenMix as the AI provider for Norris Writer chat."),
+		},
+		[TokenMixConfiguration.ApiKey]: {
+			type: 'string',
+			default: '',
+			order: 11,
+			tags: ['tokenMix'],
+			title: localize('norrisWriter.tokenMix.apiKey.title', "TokenMix: API Key"),
+			description: localize('norrisWriter.tokenMix.apiKey', "Your TokenMix API key. Get one at tokenmix.ai. Used for chat completions via the OpenAI-compatible TokenMix API."),
+		},
+		[TokenMixConfiguration.BaseUrl]: {
+			type: 'string',
+			default: TOKENMIX_DEFAULT_BASE_URL,
+			order: 12,
+			tags: ['tokenMix'],
+			title: localize('norrisWriter.tokenMix.baseUrl.title', "TokenMix: Base URL"),
+			description: localize('norrisWriter.tokenMix.baseUrl', "TokenMix API base URL (default https://api.tokenmix.ai/v1)."),
+		},
+		[TokenMixConfiguration.DefaultModel]: {
+			type: 'string',
+			default: TOKENMIX_DEFAULT_MODEL,
+			order: 13,
+			tags: ['tokenMix'],
+			title: localize('norrisWriter.tokenMix.defaultModel.title', "TokenMix: Default Model"),
+			description: localize('norrisWriter.tokenMix.defaultModel', "Default TokenMix model id when none is selected in chat (for example gpt-4o-mini)."),
 		},
 	},
 });

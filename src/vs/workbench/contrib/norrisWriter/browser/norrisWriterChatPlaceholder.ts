@@ -61,7 +61,7 @@ class NorrisWriterWritingAssistant implements IChatAgentImplementation {
 		if (!(await this.credentialService.hasApiKey())) {
 			this._showSetupMessage(progress, localize(
 				'norrisWriter.chat.tokenMixNotConfigured',
-				"Connect TokenMix to start writing with AI.\n\nRun **Norris Writer: Configure TokenMix...** from the Command Palette (Cmd+Shift+P) and paste your API key from [tokenmix.ai](https://tokenmix.ai/docs)."
+				"Connect TokenMix to start writing with AI.\n\nOpen **Settings**, search for **TokenMix**, and enter your API key. Get one at [tokenmix.ai](https://tokenmix.ai/docs)."
 			));
 			return {};
 		}

@@ -323,6 +323,11 @@ export const tocData: ITOCEntry<string> = {
 					settings: ['scm.*']
 				},
 				{
+					id: 'features/norrisWriter',
+					label: localize('norrisWriter', "Norris Writer"),
+					settings: ['norrisWriter.*']
+				},
+				{
 					id: 'features/extensions',
 					label: localize('extensions', "Extensions"),
 					settings: ['extensions.*']

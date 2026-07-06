@@ -16,6 +16,7 @@ export const enum TokenMixConfiguration {
 	Enabled = 'norrisWriter.tokenMix.enabled',
 	BaseUrl = 'norrisWriter.tokenMix.baseUrl',
 	DefaultModel = 'norrisWriter.tokenMix.defaultModel',
+	ApiKey = 'norrisWriter.tokenMix.apiKey',
 }
 
 export const NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID = 'norrisWriter.configureTokenMix';

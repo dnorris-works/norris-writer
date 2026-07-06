@@ -122,8 +122,8 @@ import './contrib/files/electron-browser/fileActions.contribution.js';
 // CodeEditor Contributions
 import './contrib/codeEditor/electron-browser/codeEditor.contribution.js';
 
-// Extension host debug IPC (required for extensions; not the full debug UI)
-import './contrib/debug/electron-browser/extensionHostDebugService.js';
+// Norris Writer: extension-host debug IPC disabled (no-op stub for extension host startup)
+import './contrib/norrisWriter/electron-browser/norrisWriterExtensionHostDebugStub.js';
 
 // Extensions Management — Norris Writer: disabled (marketplace UI)
 // import './contrib/extensions/electron-browser/extensions.contribution.js';

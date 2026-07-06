@@ -28,13 +28,11 @@ Start writing here.
 
 `;
 
-import { NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID } from '../common/tokenMixConstants.js';
-
 export const NORRIS_NEW_NOVEL_COMMAND_ID = 'norrisWriter.newNovel';
 export const NORRIS_OPEN_CHAT_COMMAND_ID = 'norrisWriter.openChat';
 export const NORRIS_WRITING_LAYOUT_COMMAND_ID = 'norrisWriter.writingLayout';
-/** @deprecated Use {@link NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID} */
-export const NORRIS_CONFIGURE_OPENROUTER_COMMAND_ID = NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID;
+/** @deprecated Use `norrisWriter.configureTokenMix` instead */
+export const NORRIS_CONFIGURE_OPENROUTER_COMMAND_ID = 'norrisWriter.configureOpenRouter';
 
 registerAction2(class NorrisNewNovelAction extends Action2 {
 	constructor() {
@@ -133,21 +131,5 @@ registerAction2(class NorrisWritingLayoutAction extends Action2 {
 	async run(accessor: ServicesAccessor): Promise<void> {
 		const commandService = accessor.get(ICommandService);
 		await commandService.executeCommand('workbench.action.toggleZenMode');
-	}
-});
-
-registerAction2(class NorrisConfigureTokenMixAction extends Action2 {
-	constructor() {
-		super({
-			id: NORRIS_CONFIGURE_OPENROUTER_COMMAND_ID,
-			title: localize2('norrisWriter.configureTokenMix', 'Configure TokenMix...'),
-			category: localize2('norrisWriter.category', 'Norris Writer'),
-			f1: true,
-		});
-	}
-
-	async run(accessor: ServicesAccessor): Promise<void> {
-		const commandService = accessor.get(ICommandService);
-		await commandService.executeCommand(NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID);
 	}
 });
