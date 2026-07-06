@@ -134,7 +134,7 @@
 		"distro",
 		"release/*"
 	],
-	"git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+	"git.branchProtectionPrompt": "alwaysCommit",
 	"git.branchRandomName.enable": true,
 	"git.pullBeforeCheckout": true,
 	"git.mergeEditor": true,
