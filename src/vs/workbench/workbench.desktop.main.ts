@@ -91,8 +91,9 @@ import './services/auxiliaryWindow/electron-browser/auxiliaryWindowService.js';
 import '../platform/extensionManagement/electron-browser/extensionsProfileScannerService.js';
 import '../platform/sandbox/electron-browser/sandboxHelperService.js';
 import '../platform/webContentExtractor/electron-browser/webContentExtractorService.js';
-import './services/agentHost/electron-browser/agentHostService.js';
-import '../platform/agentHost/electron-browser/remoteAgentHostService.js';
+// Agent Host — Norris Writer: disabled (Copilot SDK / terminal tooling)
+// import './services/agentHost/electron-browser/agentHostService.js';
+// import '../platform/agentHost/electron-browser/remoteAgentHostService.js';
 import './services/browserView/electron-browser/playwrightWorkbenchService.js';
 import './services/process/electron-browser/processService.js';
 import './services/power/electron-browser/powerService.js';
@@ -121,8 +122,8 @@ import './contrib/files/electron-browser/fileActions.contribution.js';
 // CodeEditor Contributions
 import './contrib/codeEditor/electron-browser/codeEditor.contribution.js';
 
-// Debug — Norris Writer: disabled
-// import './contrib/debug/electron-browser/extensionHostDebugService.js';
+// Extension host debug IPC (required for extensions; not the full debug UI)
+import './contrib/debug/electron-browser/extensionHostDebugService.js';
 
 // Extensions Management — Norris Writer: disabled (marketplace UI)
 // import './contrib/extensions/electron-browser/extensions.contribution.js';

@@ -476,7 +476,7 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 				{
 					id: 'openChat',
 					title: localize('gettingStarted.openChat.title', "Write with AI"),
-					description: localize('gettingStarted.openChat.description.interpolated', "Open chat to brainstorm, draft, and revise your manuscript with your OpenRouter models.\n{0}", Button(localize('configureOpenRouter', "Configure OpenRouter"), 'command:norrisWriter.configureOpenRouter')),
+					description: localize('gettingStarted.openChat.description.interpolated', "Open chat to brainstorm, draft, and revise your manuscript with TokenMix.\n{0}", Button(localize('configureTokenMix', "Configure TokenMix"), 'command:norrisWriter.configureTokenMix')),
 					when: 'workspacePlatform != \'webworker\'',
 					media: {
 						type: 'svg', altText: 'Chat', path: 'learn.svg'

@@ -9,14 +9,15 @@ import { Schemas } from '../../../../base/common/network.js';
 import { autorun, observableFromEvent } from '../../../../base/common/observable.js';
 import { isMacintosh } from '../../../../base/common/platform.js';
 import { PolicyCategory } from '../../../../base/common/policy.js';
-import '../../../../platform/agentHost/common/agentHost.config.contribution.js';
-import '../../../../platform/agentHost/browser/agentHost.config.contribution.js';
-import '../../../../platform/agentHost/common/agentHostStarter.config.contribution.js';
-import { AgentHostAhpJsonlLoggingSettingId, AgentHostCustomTerminalToolEnabledSettingId, AgentHostEnabledSettingId, AgentHostOpus48PromptEnabledSettingId, AgentHostSdkSandboxEnabledSettingId, ClaudePreferAgentHostAgentsSettingId, ClaudePreferAgentHostEditorSettingId } from '../../../../platform/agentHost/common/agentService.js';
+// Norris Writer: agent host disabled
+// import '../../../../platform/agentHost/common/agentHost.config.contribution.js';
+// import '../../../../platform/agentHost/browser/agentHost.config.contribution.js';
+// import '../../../../platform/agentHost/common/agentHostStarter.config.contribution.js';
+// import { AgentHostAhpJsonlLoggingSettingId, AgentHostCustomTerminalToolEnabledSettingId, AgentHostEnabledSettingId, AgentHostOpus48PromptEnabledSettingId, AgentHostSdkSandboxEnabledSettingId, ClaudePreferAgentHostAgentsSettingId, ClaudePreferAgentHostEditorSettingId } from '../../../../platform/agentHost/common/agentService.js';
 import { AgentNetworkFilterService, IAgentNetworkFilterService } from '../../../../platform/networkFilter/common/networkFilterService.js';
 import { AgentNetworkDomainSettingId } from '../../../../platform/networkFilter/common/settings.js';
 import { COPILOT_DISABLE_BYPASS_PERMISSIONS_MODE_KEY, COPILOT_ENABLED_PLUGINS_KEY, COPILOT_EXTRA_MARKETPLACES_KEY, COPILOT_MODEL_KEY, COPILOT_STRICT_MARKETPLACES_KEY, managedModelValue, managedSettingValue } from '../../../../platform/policy/common/copilotManagedSettings.js';
-import { AgentSandboxEnabledValue, AgentSandboxSettingId } from '../../../../platform/sandbox/common/settings.js';
+import { AgentSandboxSettingId } from '../../../../platform/sandbox/common/settings.js';
 import { registerEditorFeature } from '../../../../editor/common/editorFeatures.js';
 import * as nls from '../../../../nls.js';
 import { AccessibleViewRegistry } from '../../../../platform/accessibility/browser/accessibleViewRegistry.js';
@@ -69,7 +70,7 @@ import { ILanguageModelToolsService } from '../common/tools/languageModelToolsSe
 import { ChatToolRiskAssessmentService, IChatToolRiskAssessmentService } from './tools/chatToolRiskAssessmentService.js';
 import { ChatGoalSummaryService, IChatGoalSummaryService } from './chatGoalSummaryService.js';
 import { ChatResponseFileChangesService, IChatResponseFileChangesService } from './chatResponseFileChangesService.js';
-import { AgentPluginDiscoveryPriority, agentPluginDiscoveryRegistry, IAgentPluginService } from '../common/plugins/agentPluginService.js';
+import { IAgentPluginService } from '../common/plugins/agentPluginService.js';
 import { ChatPromptFilesExtensionPointHandler } from '../common/promptSyntax/chatPromptFilesContribution.js';
 import { isTildePath, PromptsConfig } from '../common/promptSyntax/config/config.js';
 import { INSTRUCTIONS_DEFAULT_SOURCE_FOLDER, INSTRUCTION_FILE_EXTENSION, LEGACY_MODE_DEFAULT_SOURCE_FOLDER, LEGACY_MODE_FILE_EXTENSION, PROMPT_DEFAULT_SOURCE_FOLDER, PROMPT_FILE_EXTENSION, DEFAULT_SKILL_SOURCE_FOLDERS, AGENTS_SOURCE_FOLDER, AGENT_FILE_EXTENSION, SKILL_FILENAME, CLAUDE_AGENTS_SOURCE_FOLDER, DEFAULT_HOOK_FILE_PATHS, DEFAULT_INSTRUCTIONS_SOURCE_FOLDERS, COPILOT_USER_AGENTS_SOURCE_FOLDER } from '../common/promptSyntax/config/promptFileLocations.js';
@@ -121,7 +122,7 @@ import { IChatDebugService } from '../common/chatDebugService.js';
 import { ChatDebugServiceImpl } from '../common/chatDebugServiceImpl.js';
 import { ChatDebugEditor } from './chatDebug/chatDebugEditor.js';
 import { PromptsDebugContribution } from './promptsDebugContribution.js';
-import { AgentHostChatDebugContribution } from './chatDebug/agentHostChatDebugProvider.js';
+// import { AgentHostChatDebugContribution } from './chatDebug/agentHostChatDebugProvider.js';
 import { ChatDebugEditorInput, ChatDebugEditorInputSerializer } from './chatDebug/chatDebugEditorInput.js';
 import './agentSessions/agentSessions.contribution.js';
 
@@ -165,26 +166,18 @@ import { ChatCodeBlockContextProviderService } from './codeBlockContextProviderS
 import { ChatDynamicVariableModel } from './attachments/chatDynamicVariables.js';
 import { ChatImplicitContextContribution } from './attachments/chatImplicitContext.js';
 import './widget/input/editor/chatInputCompletions.js';
-import './widget/input/editor/agentHostInputCompletions.js';
+// import './widget/input/editor/agentHostInputCompletions.js';
 import './widget/input/editor/chatInputEditorContrib.js';
 import './widget/input/editor/chatInputEditorHover.js';
 import { LanguageModelToolsConfirmationService } from './tools/languageModelToolsConfirmationService.js';
 import { LanguageModelToolsService, globalAutoApproveDescription } from './tools/languageModelToolsService.js';
 import { IToolResultCompressor } from '../common/tools/toolResultCompressor.js';
 import { ToolResultCompressorService } from './tools/toolResultCompressorService.js';
-import { AgentPluginService, ConfiguredAgentPluginDiscovery, CopilotCliAgentPluginDiscovery, ExtensionAgentPluginDiscovery, MarketplaceAgentPluginDiscovery } from '../common/plugins/agentPluginServiceImpl.js';
-import { IAgentPluginRepositoryService } from '../common/plugins/agentPluginRepositoryService.js';
-import { IPluginInstallService } from '../common/plugins/pluginInstallService.js';
-import { IPluginMarketplaceService, PluginMarketplaceService } from '../common/plugins/pluginMarketplaceService.js';
-import { WorkspacePluginSettingsService, IWorkspacePluginSettingsService } from '../common/plugins/workspacePluginSettingsService.js';
-import { AgentPluginRecommendations } from './claudePluginRecommendations.js';
+import { AgentPluginService } from '../common/plugins/agentPluginServiceImpl.js';
 import { AgentPluginEditor } from './agentPluginEditor/agentPluginEditor.js';
 import { AgentPluginEditorInput } from './agentPluginEditor/agentPluginEditorInput.js';
-import { AgentPluginRepositoryService } from './agentPluginRepositoryService.js';
 import { BrowserPluginGitCommandService } from './pluginGitCommandService.js';
 import { IPluginGitService } from '../common/plugins/pluginGitService.js';
-import { PluginInstallService } from './pluginInstallService.js';
-import { PluginAutoUpdate } from './pluginAutoUpdate.js';
 import './promptSyntax/promptCodingAgentActionContribution.js';
 import './promptSyntax/promptToolsCodeLensProvider.js';
 import './promptSyntax/promptToolSetsCodeLensProvider.js';
@@ -770,20 +763,21 @@ configurationRegistry.registerConfiguration({
 			experiment: { mode: 'startup' },
 			description: nls.localize('chat.agentsHandoffTip.mode', "Controls the tip shown above the chat input offering to continue eligible agent sessions in the Agents Window."),
 		},
-		[ClaudePreferAgentHostAgentsSettingId]: {
-			type: 'boolean',
-			markdownDescription: nls.localize('chat.agents.claude.preferAgentHost', "When enabled, Claude sessions opened from the Agents Window run inside the agent host process instead of the GitHub Copilot Chat extension. Only one Claude implementation surfaces per window. Requires `#{0}#`.", AgentHostEnabledSettingId),
-			default: false,
-			tags: ['experimental'],
-			experiment: { mode: 'startup' },
-		},
-		[ClaudePreferAgentHostEditorSettingId]: {
-			type: 'boolean',
-			description: nls.localize('chat.editor.claude.preferAgentHost', "When enabled, Claude sessions opened from the regular workbench (sidebar chat) run inside the agent host process instead of the GitHub Copilot Chat extension. Only one Claude implementation surfaces per window."),
-			default: false,
-			tags: ['experimental'],
-			experiment: { mode: 'startup' },
-		},
+		// Norris Writer: agent host settings disabled
+		// [ClaudePreferAgentHostAgentsSettingId]: {
+		// 	type: 'boolean',
+		// 	markdownDescription: nls.localize('chat.agents.claude.preferAgentHost', "When enabled, Claude sessions opened from the Agents Window run inside the agent host process instead of the GitHub Copilot Chat extension. Only one Claude implementation surfaces per window. Requires `#{0}#`.", AgentHostEnabledSettingId),
+		// 	default: false,
+		// 	tags: ['experimental'],
+		// 	experiment: { mode: 'startup' },
+		// },
+		// [ClaudePreferAgentHostEditorSettingId]: {
+		// 	type: 'boolean',
+		// 	description: nls.localize('chat.editor.claude.preferAgentHost', "When enabled, Claude sessions opened from the regular workbench (sidebar chat) run inside the agent host process instead of the GitHub Copilot Chat extension. Only one Claude implementation surfaces per window."),
+		// 	default: false,
+		// 	tags: ['experimental'],
+		// 	experiment: { mode: 'startup' },
+		// },
 		[ChatConfiguration.ChatContextUsageEnabled]: {
 			type: 'boolean',
 			default: true,
@@ -1219,39 +1213,40 @@ configurationRegistry.registerConfiguration({
 			description: nls.localize('chat.newSession.defaultMode', "The default mode for new chat sessions. When empty, the chat view's default mode is used."),
 			default: '',
 		},
-		[AgentHostAhpJsonlLoggingSettingId]: {
-			type: 'boolean',
-			description: nls.localize('chat.agentHost.ahpJsonlLogging', "When enabled, logs all AHP transport messages for agent host connections to JSONL files under the window's log directory."),
-			default: product.quality !== 'stable',
-			tags: ['experimental', 'advanced'],
-		},
-		[AgentHostCustomTerminalToolEnabledSettingId]: {
-			type: 'boolean',
-			description: nls.localize('chat.agentHost.customTerminalTool.enabled', "When enabled, Copilot SDK sessions use the Agent Host terminal tool override instead of the SDK's default terminal behavior."),
-			default: false,
-			tags: ['experimental', 'advanced'],
-		},
-		[AgentHostOpus48PromptEnabledSettingId]: {
-			type: 'boolean',
-			description: nls.localize('chat.agentHost.opus48Prompt.enabled', "When enabled, Copilot SDK sessions running a Claude Opus 4.8 model apply Opus 4.8-tuned system-prompt section overrides on top of the default system message."),
-			default: false,
-			tags: ['experimental', 'advanced'],
-		},
-		[AgentHostSdkSandboxEnabledSettingId]: {
-			type: 'string',
-			enum: [AgentSandboxEnabledValue.Off, AgentSandboxEnabledValue.On, AgentSandboxEnabledValue.AllowNetwork],
-			enumDescriptions: [
-				nls.localize('chat.agentHost.sdkSandbox.enabled.off', "No sandbox policy is forwarded for the SDK's built-in shell tool — commands run unsandboxed."),
-				nls.localize('chat.agentHost.sdkSandbox.enabled.on', "The SDK's built-in shell tool runs inside a sandbox using the configured filesystem policy and host-list-restricted network."),
-				nls.localize('chat.agentHost.sdkSandbox.enabled.allowNetwork', "The SDK's built-in shell tool runs inside a sandbox with unrestricted outbound network access."),
-			],
-			markdownDescription: nls.localize('chat.agentHost.sdkSandbox.enabled', "Sandbox mode for the Copilot SDK's built-in shell tool. Only takes effect when `#chat.agentHost.customTerminalTool.enabled#` is `false`; when the Agent Host's own terminal tool is enabled, the engine sandbox is controlled by `#chat.agent.sandbox.enabled#`. The sandbox applies only to requests that run with default approvals — not when approvals are bypassed — and is not supported on Windows yet."),
-			default: AgentSandboxEnabledValue.Off,
-			tags: ['experimental', 'advanced'],
-			experiment: {
-				mode: 'auto'
-			},
-		},
+		// Norris Writer: agent host settings disabled
+		// [AgentHostAhpJsonlLoggingSettingId]: {
+		// 	type: 'boolean',
+		// 	description: nls.localize('chat.agentHost.ahpJsonlLogging', "When enabled, logs all AHP transport messages for agent host connections to JSONL files under the window's log directory."),
+		// 	default: product.quality !== 'stable',
+		// 	tags: ['experimental', 'advanced'],
+		// },
+		// [AgentHostCustomTerminalToolEnabledSettingId]: {
+		// 	type: 'boolean',
+		// 	description: nls.localize('chat.agentHost.customTerminalTool.enabled', "When enabled, Copilot SDK sessions use the Agent Host terminal tool override instead of the SDK's default terminal behavior."),
+		// 	default: false,
+		// 	tags: ['experimental', 'advanced'],
+		// },
+		// [AgentHostOpus48PromptEnabledSettingId]: {
+		// 	type: 'boolean',
+		// 	description: nls.localize('chat.agentHost.opus48Prompt.enabled', "When enabled, Copilot SDK sessions running a Claude Opus 4.8 model apply Opus 4.8-tuned system-prompt section overrides on top of the default system message."),
+		// 	default: false,
+		// 	tags: ['experimental', 'advanced'],
+		// },
+		// [AgentHostSdkSandboxEnabledSettingId]: {
+		// 	type: 'string',
+		// 	enum: [AgentSandboxEnabledValue.Off, AgentSandboxEnabledValue.On, AgentSandboxEnabledValue.AllowNetwork],
+		// 	enumDescriptions: [
+		// 		nls.localize('chat.agentHost.sdkSandbox.enabled.off', "No sandbox policy is forwarded for the SDK's built-in shell tool — commands run unsandboxed."),
+		// 		nls.localize('chat.agentHost.sdkSandbox.enabled.on', "The SDK's built-in shell tool runs inside a sandbox using the configured filesystem policy and host-list-restricted network."),
+		// 		nls.localize('chat.agentHost.sdkSandbox.enabled.allowNetwork', "The SDK's built-in shell tool runs inside a sandbox with unrestricted outbound network access."),
+		// 	],
+		// 	markdownDescription: nls.localize('chat.agentHost.sdkSandbox.enabled', "Sandbox mode for the Copilot SDK's built-in shell tool. Only takes effect when `#chat.agentHost.customTerminalTool.enabled#` is `false`; when the Agent Host's own terminal tool is enabled, the engine sandbox is controlled by `#chat.agent.sandbox.enabled#`. The sandbox applies only to requests that run with default approvals — not when approvals are bypassed — and is not supported on Windows yet."),
+		// 	default: AgentSandboxEnabledValue.Off,
+		// 	tags: ['experimental', 'advanced'],
+		// 	experiment: {
+		// 		mode: 'auto'
+		// 	},
+		// },
 		[ChatConfiguration.ToolConfirmationCarousel]: {
 			type: 'boolean',
 			description: nls.localize('chat.tools.confirmationCarousel', "When enabled, multiple tool confirmations are batched into a carousel above the input."),
@@ -2448,7 +2443,7 @@ registerWorkbenchContribution2(CopilotTelemetryContribution.ID, CopilotTelemetry
 registerWorkbenchContribution2(ChatResolverContribution.ID, ChatResolverContribution, WorkbenchPhase.BlockStartup);
 registerWorkbenchContribution2(ChatDebugResolverContribution.ID, ChatDebugResolverContribution, WorkbenchPhase.BlockStartup);
 registerWorkbenchContribution2(PromptsDebugContribution.ID, PromptsDebugContribution, WorkbenchPhase.BlockRestore);
-registerWorkbenchContribution2(AgentHostChatDebugContribution.ID, AgentHostChatDebugContribution, WorkbenchPhase.BlockRestore);
+// registerWorkbenchContribution2(AgentHostChatDebugContribution.ID, AgentHostChatDebugContribution, WorkbenchPhase.BlockRestore);
 registerWorkbenchContribution2(ChatLanguageModelsDataContribution.ID, ChatLanguageModelsDataContribution, WorkbenchPhase.BlockRestore);
 registerWorkbenchContribution2(ChatSlashCommandsContribution.ID, ChatSlashCommandsContribution, WorkbenchPhase.Eventually);
 registerWorkbenchContribution2(ChatSessionOptionSlashCommandsContribution.ID, ChatSessionOptionSlashCommandsContribution, WorkbenchPhase.Eventually);
@@ -2492,8 +2487,8 @@ registerWorkbenchContribution2(UserToolSetsContributions.ID, UserToolSetsContrib
 registerWorkbenchContribution2(PromptLanguageFeaturesProvider.ID, PromptLanguageFeaturesProvider, WorkbenchPhase.Eventually);
 registerWorkbenchContribution2(ChatWindowNotifier.ID, ChatWindowNotifier, WorkbenchPhase.AfterRestored);
 registerWorkbenchContribution2(ChatRepoInfoContribution.ID, ChatRepoInfoContribution, WorkbenchPhase.Eventually);
-registerWorkbenchContribution2(AgentPluginRecommendations.ID, AgentPluginRecommendations, WorkbenchPhase.Eventually);
-registerWorkbenchContribution2(PluginAutoUpdate.ID, PluginAutoUpdate, WorkbenchPhase.Eventually);
+// registerWorkbenchContribution2(AgentPluginRecommendations.ID, AgentPluginRecommendations, WorkbenchPhase.Eventually);
+// registerWorkbenchContribution2(PluginAutoUpdate.ID, PluginAutoUpdate, WorkbenchPhase.Eventually);
 
 registerChatActions();
 registerChatAccessibilityActions();
@@ -2521,10 +2516,11 @@ registerPlanReviewFeedbackEditorActions();
 registerAction2(ConfigureToolSets);
 registerEditorFeature(ChatPasteProvidersFeature);
 
-agentPluginDiscoveryRegistry.register(new SyncDescriptor(ConfiguredAgentPluginDiscovery), AgentPluginDiscoveryPriority.Configured);
-agentPluginDiscoveryRegistry.register(new SyncDescriptor(MarketplaceAgentPluginDiscovery), AgentPluginDiscoveryPriority.Marketplace);
-agentPluginDiscoveryRegistry.register(new SyncDescriptor(ExtensionAgentPluginDiscovery), AgentPluginDiscoveryPriority.Extension);
-agentPluginDiscoveryRegistry.register(new SyncDescriptor(CopilotCliAgentPluginDiscovery), AgentPluginDiscoveryPriority.CopilotCli);
+// Norris Writer: agent plugin marketplace disabled (requires terminal for npm/pip install)
+// agentPluginDiscoveryRegistry.register(new SyncDescriptor(ConfiguredAgentPluginDiscovery), AgentPluginDiscoveryPriority.Configured);
+// agentPluginDiscoveryRegistry.register(new SyncDescriptor(MarketplaceAgentPluginDiscovery), AgentPluginDiscoveryPriority.Marketplace);
+// agentPluginDiscoveryRegistry.register(new SyncDescriptor(ExtensionAgentPluginDiscovery), AgentPluginDiscoveryPriority.Extension);
+// agentPluginDiscoveryRegistry.register(new SyncDescriptor(CopilotCliAgentPluginDiscovery), AgentPluginDiscoveryPriority.CopilotCli);
 
 registerSingleton(IChatResponseResourceFileSystemProvider, ChatResponseResourceFileSystemProvider, InstantiationType.Delayed);
 registerSingleton(IChatTransferService, ChatTransferService, InstantiationType.Delayed);
@@ -2541,11 +2537,12 @@ registerSingleton(IChatAgentService, ChatAgentService, InstantiationType.Delayed
 registerSingleton(IChatAgentNameService, ChatAgentNameService, InstantiationType.Delayed);
 registerSingleton(IChatVariablesService, ChatVariablesService, InstantiationType.Delayed);
 registerSingleton(IAgentPluginService, AgentPluginService, InstantiationType.Delayed);
-registerSingleton(IPluginMarketplaceService, PluginMarketplaceService, InstantiationType.Delayed);
-registerSingleton(IWorkspacePluginSettingsService, WorkspacePluginSettingsService, InstantiationType.Delayed);
-registerSingleton(IAgentPluginRepositoryService, AgentPluginRepositoryService, InstantiationType.Delayed);
+// Norris Writer: agent plugin marketplace disabled (requires terminal for npm/pip install)
+// registerSingleton(IPluginMarketplaceService, PluginMarketplaceService, InstantiationType.Delayed);
+// registerSingleton(IWorkspacePluginSettingsService, WorkspacePluginSettingsService, InstantiationType.Delayed);
+// registerSingleton(IAgentPluginRepositoryService, AgentPluginRepositoryService, InstantiationType.Delayed);
 registerSingleton(IPluginGitService, BrowserPluginGitCommandService, InstantiationType.Delayed);
-registerSingleton(IPluginInstallService, PluginInstallService, InstantiationType.Delayed);
+// registerSingleton(IPluginInstallService, PluginInstallService, InstantiationType.Delayed);
 registerSingleton(ILanguageModelToolsService, LanguageModelToolsService, InstantiationType.Delayed);
 registerSingleton(IToolResultCompressor, ToolResultCompressorService, InstantiationType.Delayed);
 registerSingleton(ILanguageModelToolsConfirmationService, LanguageModelToolsConfirmationService, InstantiationType.Delayed);

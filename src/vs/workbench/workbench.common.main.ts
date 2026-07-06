@@ -143,8 +143,9 @@ import './services/editor/common/customEditorLabelService.js';
 import './services/dataChannel/browser/dataChannelService.js';
 import './services/inlineCompletions/common/inlineCompletionsUnification.js';
 import './services/chat/common/chatEntitlementService.js';
-import './services/agentHost/common/agentHostResourceService.js';
-import '../platform/agentHost/browser/agentHostConnectionsService.js';
+// Agent Host — Norris Writer: disabled
+// import './services/agentHost/common/agentHostResourceService.js';
+// import '../platform/agentHost/browser/agentHostConnectionsService.js';
 import './services/log/common/defaultLogLevels.js';
 
 import { InstantiationType, registerSingleton } from '../platform/instantiation/common/extensions.js';
@@ -392,8 +393,8 @@ import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
 import './contrib/welcomeViews/common/viewsWelcome.contribution.js';
 import './contrib/welcomeViews/common/newFile.contribution.js';
 
-// Welcome Onboarding — Norris Writer: disabled (IDE onboarding overlay)
-// import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
+// Welcome onboarding (required by startup page; not the IDE scenario onboarding)
+import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
 
 // Onboarding (scenario engine) — Norris Writer: disabled
 // import './contrib/onboarding/browser/onboarding.contribution.js';

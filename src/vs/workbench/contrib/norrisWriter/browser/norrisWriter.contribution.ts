@@ -14,6 +14,7 @@ import { ChatConfiguration } from '../../chat/common/constants.js';
 import './norrisWriterActions.js';
 import './norrisWriterWordCount.js';
 import './norrisWriterChatPlaceholder.js';
+import './tokenMixContribution.js';
 
 Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultConfigurations([{
 	overrides: {
