@@ -167,53 +167,20 @@ export const startEntries: GettingStartedStartEntryContent = [
 		}
 	},
 	{
-		id: 'topLevelGitClone',
-		title: localize('gettingStarted.topLevelGitClone.title', "Clone Git Repository..."),
-		description: localize('gettingStarted.topLevelGitClone.description', "Clone a remote repository to a local folder"),
-		when: 'config.git.enabled && !git.missing',
+		id: 'topLevelGitInit',
+		title: localize('gettingStarted.topLevelGitInit.title', "Initialize Git for Manuscript..."),
+		description: localize('gettingStarted.topLevelGitInit.description', "Track changes to your writing, including AI edits"),
+		when: 'config.git.enabled && !git.missing && workspaceFolderCount == 0',
 		icon: Codicon.sourceControl,
 		content: {
 			type: 'startEntry',
-			command: 'command:git.clone',
-		}
-	},
-	{
-		id: 'topLevelGitOpen',
-		title: localize('gettingStarted.topLevelGitOpen.title', "Open Repository..."),
-		description: localize('gettingStarted.topLevelGitOpen.description', "Connect to a remote repository or pull request to browse, search, edit, and commit"),
-		when: 'workspacePlatform == \'webworker\'',
-		icon: Codicon.sourceControl,
-		content: {
-			type: 'startEntry',
-			command: 'command:remoteHub.openRepository',
-		}
-	},
-	{
-		id: 'topLevelRemoteOpen',
-		title: localize('gettingStarted.topLevelRemoteOpen.title', "Connect to..."),
-		description: localize('gettingStarted.topLevelRemoteOpen.description', "Connect to remote development workspaces."),
-		when: '!isWeb',
-		icon: Codicon.remote,
-		content: {
-			type: 'startEntry',
-			command: 'command:workbench.action.remote.showMenu',
-		}
-	},
-	{
-		id: 'topLevelOpenTunnel',
-		title: localize('gettingStarted.topLevelOpenTunnel.title', "Open Tunnel..."),
-		description: localize('gettingStarted.topLevelOpenTunnel.description', "Connect to a remote machine through a Tunnel"),
-		when: 'isWeb && showRemoteStartEntryInWeb',
-		icon: Codicon.remote,
-		content: {
-			type: 'startEntry',
-			command: 'command:workbench.action.remote.showWebStartEntryActions',
+			command: 'command:git.init',
 		}
 	},
 	{
 		id: 'topLevelNewWorkspaceChat',
-		title: localize('gettingStarted.newWorkspaceChat.title', "Generate New Workspace..."),
-		description: localize('gettingStarted.newWorkspaceChat.description', "Chat to create a new workspace"),
+		title: localize('gettingStarted.newWorkspaceChat.title', "Start Writing with AI..."),
+		description: localize('gettingStarted.newWorkspaceChat.description', "Open chat to brainstorm, draft, and revise your manuscript"),
 		icon: Codicon.chatSparkle,
 		when: '!isWeb && !chatSetupHidden && !chatSetupDisabledInWorkspace',
 		content: {
@@ -225,51 +192,43 @@ export const startEntries: GettingStartedStartEntryContent = [
 
 const Button = (title: string, href: string) => `[${title}](${href})`;
 
-const CopilotStepTitle = localize('gettingStarted.copilotSetup.title', "Use AI features with Copilot for free");
-const CopilotDescription = localize({ key: 'gettingStarted.copilotSetup.description', comment: ['{Locked="["}', '{Locked="]({0})"}'] }, "You can use [Copilot]({0}) to generate code across multiple files, fix errors, ask questions about your code, and much more using natural language.", defaultChat.documentationUrl ?? '');
-const CopilotTermsString = localize({ key: 'gettingStarted.copilotSetup.terms', comment: ['{Locked="]({2})"}', '{Locked="]({3})"}'] }, "By continuing with {0} Copilot, you agree to {1}'s [Terms]({2}) and [Privacy Statement]({3})", defaultChat.provider.default.name, defaultChat.provider.default.name, defaultChat.termsStatementUrl, defaultChat.privacyStatementUrl);
-const CopilotAnonymousButton = Button(localize('setupCopilotButton.setup', "Use AI Features"), `command:workbench.action.chat.triggerSetupAnonymousWithoutDialog`);
-const CopilotSignedOutButton = Button(localize('setupCopilotButton.setup', "Use AI Features"), `command:workbench.action.chat.triggerSetup`);
-const CopilotSignedInButton = Button(localize('setupCopilotButton.setup', "Use AI Features"), `command:workbench.action.chat.triggerSetup`);
-const CopilotCompleteButton = Button(localize('setupCopilotButton.chatWithCopilot', "Start to Chat"), 'command:workbench.action.chat.open');
-
-function createCopilotSetupStep(id: string, button: string, when: string, includeTerms: boolean): BuiltinGettingStartedStep {
-	const description = includeTerms ?
-		`${CopilotDescription}\n${CopilotTermsString}\n${button}` :
-		`${CopilotDescription}\n${button}`;
-
-	return {
-		id,
-		title: CopilotStepTitle,
-		description,
-		when: `${when} && !chatSetupHidden && !chatSetupDisabledInWorkspace`,
-		media: {
-			type: 'svg', altText: 'VS Code Copilot multi file edits', path: 'multi-file-edits.svg'
-		},
-	};
-}
+const OpenRouterSetupButton = Button(localize('setupOpenRouterButton', "Configure OpenRouter"), `command:norrisWriter.configureOpenRouter`);
 
 export const walkthroughs: GettingStartedWalkthroughContent = [
 	{
 		id: 'Setup',
-		title: localize('gettingStarted.setup.title', "Get started with VS Code"),
-		description: localize('gettingStarted.setup.description', "Customize your editor, learn the basics, and start coding"),
+		title: localize('gettingStarted.setup.title', "Get started with Norris Writer"),
+		description: localize('gettingStarted.setup.description', "Set up AI, open a project, and start writing"),
 		isFeatured: true,
 		icon: setupIcon,
 		when: '!isWeb',
-		walkthroughPageTitle: localize('gettingStarted.setup.walkthroughPageTitle', 'Setup VS Code'),
+		walkthroughPageTitle: localize('gettingStarted.setup.walkthroughPageTitle', 'Setup Norris Writer'),
 		next: 'Beginner',
 		content: {
 			type: 'steps',
 			steps: [
-				createCopilotSetupStep('CopilotSetupAnonymous', CopilotAnonymousButton, 'chatAnonymous && !chatSetupCompleted', true),
-				createCopilotSetupStep('CopilotSetupSignedOut', CopilotSignedOutButton, 'chatEntitlementSignedOut && !chatAnonymous && !github.copilot.hasByokModels', false),
-				createCopilotSetupStep('CopilotSetupComplete', CopilotCompleteButton, 'chatSetupCompleted && !chatSetupDisabled && (chatAnonymous || chatPlanPro || chatPlanProPlus || chatPlanMax || chatPlanBusiness || chatPlanEnterprise || chatPlanFree)', false),
-				createCopilotSetupStep('CopilotSetupSignedIn', CopilotSignedInButton, '!chatEntitlementSignedOut && (!chatSetupCompleted || chatSetupDisabled || chatPlanCanSignUp)', false),
+				{
+					id: 'openRouterSetup',
+					title: localize('gettingStarted.openRouterSetup.title', "Connect OpenRouter"),
+					description: localize('gettingStarted.openRouterSetup.description.interpolated', "Add your OpenRouter API key to chat with AI while you write. No GitHub account required.\n{0}", OpenRouterSetupButton),
+					when: '!chatSetupHidden && !chatSetupDisabledInWorkspace && !github.copilot.hasByokModels',
+					media: {
+						type: 'svg', altText: 'AI writing assistant', path: 'multi-file-edits.svg'
+					},
+				},
+				{
+					id: 'openChatAfterSetup',
+					title: localize('gettingStarted.openRouterChat.title', "Start writing with AI"),
+					description: localize('gettingStarted.openRouterChat.description.interpolated', "Open chat to brainstorm, draft, and revise your manuscript.\n{0}", Button(localize('openChat', "Open Chat"), 'command:norrisWriter.openChat')),
+					when: 'chatSetupCompleted && github.copilot.hasByokModels',
+					media: {
+						type: 'svg', altText: 'Chat', path: 'learn.svg'
+					},
+				},
 				{
 					id: 'pickColorTheme',
 					title: localize('gettingStarted.pickColor.title', "Choose your theme"),
-					description: localize('gettingStarted.pickColor.description.interpolated', "The right theme helps you focus on your code, is easy on your eyes, and is simply more fun to use.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),
+					description: localize('gettingStarted.pickColor.description.interpolated', "Pick a theme that keeps you focused while you write.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),
 					completionEvents: [
 						'onSettingChanged:workbench.colorTheme',
 						'onCommand:workbench.action.selectTheme'
@@ -277,10 +236,10 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 					media: { type: 'markdown', path: 'theme_picker', }
 				},
 				{
-					id: 'videoTutorial',
-					title: localize('gettingStarted.videoTutorial.title', "Watch video tutorials"),
-					description: localize('gettingStarted.videoTutorial.description.interpolated', "Watch the first in a series of short & practical video tutorials for VS Code's key features.\n{0}", Button(localize('watch', "Watch Tutorial"), 'https://aka.ms/vscode-getting-started-video')),
-					media: { type: 'svg', altText: 'VS Code Settings', path: 'learn.svg' },
+					id: 'zenMode',
+					title: localize('gettingStarted.zenMode.title', "Write without distractions"),
+					description: localize('gettingStarted.zenMode.description.interpolated', "Hide panels and sidebars for focused writing with Zen Mode.\n{0}", Button(localize('toggleZenMode', "Toggle Zen Mode"), 'command:workbench.action.toggleZenMode')),
+					media: { type: 'svg', altText: 'Zen Mode', path: 'learn.svg' },
 				}
 			]
 		}
@@ -301,7 +260,7 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 				{
 					id: 'pickColorThemeWeb',
 					title: localize('gettingStarted.pickColor.title', "Choose your theme"),
-					description: localize('gettingStarted.pickColor.description.interpolated', "The right theme helps you focus on your code, is easy on your eyes, and is simply more fun to use.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),
+					description: localize('gettingStarted.pickColorWeb.description.interpolated', "Pick a theme that keeps you focused while you write.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),
 					completionEvents: [
 						'onSettingChanged:workbench.colorTheme',
 						'onCommand:workbench.action.selectTheme'
@@ -481,54 +440,26 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 	{
 		id: 'Beginner',
 		isFeatured: false,
-		title: localize('gettingStarted.beginner.title', "Learn the Fundamentals"),
+		title: localize('gettingStarted.beginner.title', "Writing Essentials"),
 		icon: beginnerIcon,
-		description: localize('gettingStarted.beginner.description', "Get an overview of the most essential features"),
-		walkthroughPageTitle: localize('gettingStarted.beginner.walkthroughPageTitle', 'Essential Features'),
+		description: localize('gettingStarted.beginner.description', "Learn the core tools for drafting, revising, and tracking your manuscript"),
+		walkthroughPageTitle: localize('gettingStarted.beginner.walkthroughPageTitle', 'Writing Essentials'),
 		content: {
 			type: 'steps',
 			steps: [
 				{
-					id: 'settingsAndSync',
+					id: 'settings',
 					title: localize('gettingStarted.settings.title', "Tune your settings"),
-					description: localize('gettingStarted.settingsAndSync.description.interpolated', "Customize every aspect of VS Code and [sync](command:workbench.userDataSync.actions.turnOn) customizations across devices.\n{0}", Button(localize('tweakSettings', "Open Settings"), 'command:toSide:workbench.action.openSettings')),
-					when: 'workspacePlatform != \'webworker\' && syncStatus != uninitialized',
-					completionEvents: ['onEvent:sync-enabled'],
-					media: {
-						type: 'svg', altText: 'VS Code Settings', path: 'settings.svg'
-					},
-				},
-				{
-					id: 'extensions',
-					title: localize('gettingStarted.extensions.title', "Code with extensions"),
-					description: localize('gettingStarted.extensions.description.interpolated', "Extensions are VS Code's power-ups. They range from handy productivity hacks, expanding out-of-the-box features, to adding completely new capabilities.\n{0}", Button(localize('browsePopular', "Browse Popular Extensions"), 'command:workbench.extensions.action.showPopularExtensions')),
+					description: localize('gettingStarted.settings.description.interpolated', "Adjust editor preferences for your writing workflow.\n{0}", Button(localize('tweakSettings', "Open Settings"), 'command:toSide:workbench.action.openSettings')),
 					when: 'workspacePlatform != \'webworker\'',
 					media: {
-						type: 'svg', altText: 'VS Code extension marketplace with featured language extensions', path: 'extensions.svg'
-					},
-				},
-				{
-					id: 'terminal',
-					title: localize('gettingStarted.terminal.title', "Built-in terminal"),
-					description: localize('gettingStarted.terminal.description.interpolated', "Quickly run shell commands and monitor build output, right next to your code.\n{0}", Button(localize('showTerminal', "Open Terminal"), 'command:workbench.action.terminal.toggleTerminal')),
-					when: 'workspacePlatform != \'webworker\' && remoteName != codespaces && !terminalIsOpen',
-					media: {
-						type: 'svg', altText: 'Integrated terminal running a few npm commands', path: 'terminal.svg'
-					},
-				},
-				{
-					id: 'debugging',
-					title: localize('gettingStarted.debug.title', "Watch your code in action"),
-					description: localize('gettingStarted.debug.description.interpolated', "Accelerate your edit, build, test, and debug loop by setting up a launch configuration.\n{0}", Button(localize('runProject', "Run your Project"), 'command:workbench.action.debug.selectandstart')),
-					when: 'workspacePlatform != \'webworker\' && workspaceFolderCount != 0',
-					media: {
-						type: 'svg', altText: 'Run and debug view.', path: 'debug.svg',
+						type: 'svg', altText: 'Settings', path: 'settings.svg'
 					},
 				},
 				{
 					id: 'scmClone',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scmClone.description.interpolated', "Set up the built-in version control for your project to track your changes and collaborate with others.\n{0}", Button(localize('cloneRepo', "Clone Repository"), 'command:git.clone')),
+					title: localize('gettingStarted.scm.title', "Track your manuscript with Git"),
+					description: localize('gettingStarted.scmClone.description.interpolated', "Initialize Git to review AI edits and keep a history of your writing.\n{0}", Button(localize('initRepo', "Initialize Git Repository"), 'command:git.init')),
 					when: 'config.git.enabled && !git.missing && workspaceFolderCount == 0',
 					media: {
 						type: 'svg', altText: 'Source Control view.', path: 'git.svg',
@@ -536,17 +467,35 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 				},
 				{
 					id: 'scmSetup',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scmSetup.description.interpolated', "Set up the built-in version control for your project to track your changes and collaborate with others.\n{0}", Button(localize('initRepo', "Initialize Git Repository"), 'command:git.init')),
+					title: localize('gettingStarted.scm.title', "Track your manuscript with Git"),
+					description: localize('gettingStarted.scmSetup.description.interpolated', "Commit changes to see what you and AI revised over time.\n{0}", Button(localize('initRepo', "Initialize Git Repository"), 'command:git.init')),
 					when: 'config.git.enabled && !git.missing && workspaceFolderCount != 0 && gitOpenRepositoryCount == 0',
 					media: {
 						type: 'svg', altText: 'Source Control view.', path: 'git.svg',
 					},
 				},
 				{
+					id: 'wordCount',
+					title: localize('gettingStarted.wordCount.title', "Track your word count"),
+					description: localize('gettingStarted.wordCount.description.interpolated', "Word count appears in the status bar while you write. Create a novel project to scaffold chapters, notes, and characters.\n{0}", Button(localize('newNovel', "New Novel Project"), 'command:norrisWriter.newNovel')),
+					when: 'workspacePlatform != \'webworker\'',
+					media: {
+						type: 'svg', altText: 'Word count', path: 'learn.svg'
+					},
+				},
+				{
+					id: 'openChat',
+					title: localize('gettingStarted.openChat.title', "Write with AI"),
+					description: localize('gettingStarted.openChat.description.interpolated', "Open chat to brainstorm, draft, and revise your manuscript with your OpenRouter models.\n{0}", Button(localize('configureOpenRouter', "Configure OpenRouter"), 'command:norrisWriter.configureOpenRouter')),
+					when: 'workspacePlatform != \'webworker\'',
+					media: {
+						type: 'svg', altText: 'Chat', path: 'learn.svg'
+					},
+				},
+				{
 					id: 'scm',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scm.description.interpolated', "No more looking up Git commands! Git and GitHub workflows are seamlessly integrated.\n{0}", Button(localize('openSCM', "Open Source Control"), 'command:workbench.view.scm')),
+					title: localize('gettingStarted.scmActive.title', "Review AI edits with Git"),
+					description: localize('gettingStarted.scmActive.description.interpolated', "Use Source Control to commit and diff changes after AI revisions.\n{0}", Button(localize('openSCM', "Open Source Control"), 'command:workbench.view.scm')),
 					when: 'config.git.enabled && !git.missing && workspaceFolderCount != 0 && gitOpenRepositoryCount != 0 && activeViewlet != \'workbench.view.scm\'',
 					media: {
 						type: 'svg', altText: 'Source Control view.', path: 'git.svg',

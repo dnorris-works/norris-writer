@@ -87,13 +87,7 @@ export function hygiene(some: NodeJS.ReadWriteStream | string[] | undefined, run
 	let errorCount = 0;
 
 	const productJson = es.through(function (file: VinylFile) {
-		const product = JSON.parse(file.contents!.toString('utf8'));
-
-		if (product.extensionsGallery) {
-			console.error(`product.json: Contains 'extensionsGallery'`);
-			errorCount++;
-		}
-
+		// Norris Writer: product.json is owned by this repo; no upstream gallery policy.
 		this.emit('data', file);
 	});
 
@@ -338,15 +332,6 @@ if (import.meta.main) {
 				const some = out.split(/\r?\n/).filter((l) => !!l);
 
 				if (some.length > 0) {
-					// Check copilot engines.vscode version if relevant files are staged
-					if (some.some(f => f === 'package.json' || f.startsWith('extensions/copilot/'))) {
-						const copilotError = checkCopilotEnginesVersion(process.cwd());
-						if (copilotError) {
-							console.error(copilotError);
-							process.exit(1);
-						}
-					}
-
 					// Check that no new .js/.cjs/.mjs files are being added outside of the allowlist
 					if (some.some(f => /\.(js|cjs|mjs)$/.test(f) || f === '.eslint-allowed-javascript-files')) {
 						const jsAllowlistError = checkNoNewJavaScriptFiles(process.cwd());

@@ -51,6 +51,12 @@ suite('product.json - Norris Writer Identity', () => {
 		});
 	});
 
+	test('dev features and built-in extensions are disabled for writers', () => {
+		assert.strictEqual(product['enableDevFeatures'], false, 'enableDevFeatures should be false');
+		assert.deepStrictEqual(product['builtInExtensions'], [], 'builtInExtensions should be empty (no js-debug)');
+		assert.strictEqual(product['reportIssueUrl'], undefined, 'reportIssueUrl should be unset');
+	});
+
 	test('tunnel CLI is not configured', () => {
 		assert.strictEqual(product['tunnelApplicationName'], undefined, 'tunnelApplicationName should be unset for a GUI-only app');
 	});

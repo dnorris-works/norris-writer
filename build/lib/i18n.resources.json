@@ -167,6 +167,10 @@
 			"project": "vscode-workbench"
 		},
 		{
+			"name": "vs/workbench/contrib/norrisWriter",
+			"project": "vscode-workbench"
+		},
+		{
 			"name": "vs/workbench/contrib/inlineChat",
 			"project": "vscode-workbench"
 		},

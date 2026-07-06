@@ -28,7 +28,7 @@ registerAction2(class extends Action2 {
 	constructor() {
 		super({
 			id: 'welcome.showNewFileEntries',
-			title: localize2('welcome.newFile', 'New File...'),
+			title: localize2('welcome.newFile', 'New Manuscript...'),
 			category,
 			f1: true,
 			precondition: IsSessionsWindowContext.negate(),
@@ -103,7 +103,7 @@ class NewFileTemplatesManager extends Disposable {
 
 		const disposables = new DisposableStore();
 		const qp = this.quickInputService.createQuickPick({ useSeparators: true });
-		qp.title = localize('newFileTitle', "New File...");
+		qp.title = localize('newFileTitle', "New Manuscript...");
 		qp.placeholder = localize('newFilePlaceholder', "Select File Type or Enter File Name...");
 		qp.sortByLabel = false;
 		qp.matchOnDetail = true;
@@ -209,6 +209,15 @@ class NewFileTemplatesManager extends Disposable {
 
 Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench)
 	.registerWorkbenchContribution(NewFileTemplatesManager, LifecyclePhase.Restored);
+
+MenuRegistry.appendMenuItem(MenuId.NewFile, {
+	group: 'file',
+	command: {
+		id: 'norrisWriter.newNovel',
+		title: localize('miNewNovel', "Novel Project")
+	},
+	order: 0
+});
 
 MenuRegistry.appendMenuItem(MenuId.NewFile, {
 	group: 'file',

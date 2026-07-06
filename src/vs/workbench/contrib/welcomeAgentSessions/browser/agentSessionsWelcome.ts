@@ -286,11 +286,12 @@ export class AgentSessionsWelcomePage extends EditorPane {
 		const workspaces = await this.getRecentlyOpenedWorkspaces(false);
 		const openEntry = workspaces.length > 0
 			? { icon: Codicon.folderOpened, label: localize('openRecent', "Open Recent..."), command: 'workbench.action.openRecent' }
-			: { icon: Codicon.folderOpened, label: localize('openFolder', "Open Folder..."), command: 'workbench.action.files.openFolder' };
+			: { icon: Codicon.folderOpened, label: localize('openProject', "Open Project..."), command: 'workbench.action.files.openFolder' };
 		const entries = [
 			openEntry,
-			{ icon: Codicon.newFile, label: localize('newFile', "New file..."), command: 'welcome.showNewFileEntries' },
-			{ icon: Codicon.repoClone, label: localize('cloneRepo', "Clone Git Repository..."), command: 'git.clone' },
+			{ icon: Codicon.newFile, label: localize('newManuscript', "New Manuscript..."), command: 'welcome.showNewFileEntries' },
+			{ icon: Codicon.book, label: localize('newNovel', "New Novel Project..."), command: 'norrisWriter.newNovel' },
+			{ icon: Codicon.commentDiscussion, label: localize('openChat', "Start Writing with AI..."), command: 'norrisWriter.openChat' },
 		];
 
 		for (const entry of entries) {
