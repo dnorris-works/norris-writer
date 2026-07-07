@@ -40,6 +40,8 @@ import { ipcBrowserViewChannelName } from '../../platform/browserView/common/bro
 import { ipcBrowserViewGroupChannelName } from '../../platform/browserView/common/browserViewGroup.js';
 import { BrowserViewMainService, IBrowserViewMainService } from '../../platform/browserView/electron-main/browserViewMainService.js';
 import { BrowserViewGroupMainService, IBrowserViewGroupMainService } from '../../platform/browserView/electron-main/browserViewGroupMainService.js';
+import { CodexDatabaseMainService } from '../../workbench/contrib/norrisWriter/electron-main/codexDatabaseMainService.js';
+import { CODEX_DATABASE_CHANNEL, ICodexDatabaseService } from '../../workbench/contrib/norrisWriter/common/codexDatabaseService.js';
 import { NativeParsedArgs } from '../../platform/environment/common/argv.js';
 import { IEnvironmentMainService } from '../../platform/environment/electron-main/environmentMainService.js';
 import { isLaunchedFromCli } from '../../platform/environment/node/argvHelper.js';
@@ -1125,6 +1127,9 @@ export class CodeApplication extends Disposable {
 		services.set(IBrowserViewMainService, new SyncDescriptor(BrowserViewMainService, undefined, false /* proxied to other processes */));
 		services.set(IBrowserViewGroupMainService, new SyncDescriptor(BrowserViewGroupMainService, undefined, false /* proxied to other processes */));
 
+		// Norris Writer Codex database
+		services.set(ICodexDatabaseService, new SyncDescriptor(CodexDatabaseMainService, undefined, false /* proxied to other processes */));
+
 		// Keyboard Layout
 		services.set(IKeyboardLayoutMainService, new SyncDescriptor(KeyboardLayoutMainService));
 
@@ -1298,6 +1303,10 @@ export class CodeApplication extends Disposable {
 		// Process
 		const processChannel = ProxyChannel.fromService(new ProcessMainService(this.logService, accessor.get(IDiagnosticsService), accessor.get(IDiagnosticsMainService)), disposables);
 		mainProcessElectronServer.registerChannel('process', processChannel);
+
+		// Norris Writer Codex database
+		const codexDatabaseChannel = ProxyChannel.fromService(accessor.get(ICodexDatabaseService), disposables);
+		mainProcessElectronServer.registerChannel(CODEX_DATABASE_CHANNEL, codexDatabaseChannel);
 
 		// Encryption
 		const encryptionChannel = ProxyChannel.fromService(accessor.get(IEncryptionMainService), disposables);

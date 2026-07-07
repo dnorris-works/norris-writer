@@ -93,6 +93,7 @@ import '../platform/sandbox/electron-browser/sandboxHelperService.js';
 import '../platform/webContentExtractor/electron-browser/webContentExtractorService.js';
 // Agent Host — Norris Writer: real process disabled; null services registered for chat UI.
 import './contrib/norrisWriter/browser/norrisWriterWorkbenchServices.js';
+import './contrib/norrisWriter/electron-browser/codexDatabaseService.js';
 import './services/browserView/electron-browser/playwrightWorkbenchService.js';
 import './services/process/electron-browser/processService.js';
 import './services/power/electron-browser/powerService.js';
