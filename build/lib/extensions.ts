@@ -375,6 +375,18 @@ const excludedExtensions = [
 	'vb',
 	'xml',
 	'log',
+	// Norris Writer — extra themes (keep theme-defaults + theme-seti only)
+	'theme-abyss',
+	'theme-kimbie-dark',
+	'theme-monokai',
+	'theme-monokai-dimmed',
+	'theme-quietlight',
+	'theme-red',
+	'theme-solarized-dark',
+	'theme-solarized-light',
+	'theme-tomorrow-night-blue',
+	// Norris Writer — remote / dev tooling
+	'tunnel-forwarding',
 ];
 
 const marketplaceWebExtensionsExclude = new Set([
