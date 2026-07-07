@@ -25,7 +25,8 @@ import '../sessions/common/sizes.js';
 //#region --- workbench actions
 
 import './browser/actions/textInputActions.js';
-import './browser/actions/developerActions.js';
+// Norris Writer: disabled (developer command palette category)
+// import './browser/actions/developerActions.js';
 import './browser/actions/helpActions.js';
 import './browser/actions/layoutActions.js';
 import './browser/actions/listCommands.js';
@@ -213,10 +214,10 @@ import './contrib/preferences/browser/preferences.contribution.js';
 import './contrib/preferences/browser/keybindingsEditorContribution.js';
 import './contrib/preferences/browser/preferencesSearch.js';
 
-// Performance
-import './contrib/performance/browser/performance.contribution.js';
+// Performance — Norris Writer: disabled
+// import './contrib/performance/browser/performance.contribution.js';
 
-// Notebook
+// Notebook — infrastructure for chat editing and extension host (Jupyter UI excluded from build)
 import './contrib/notebook/browser/notebook.contribution.js';
 
 // Speech
@@ -239,7 +240,7 @@ import './contrib/imageCarousel/browser/imageCarousel.contribution.js';
 // Norris Writer
 import './contrib/norrisWriter/browser/norrisWriter.contribution.js';
 
-// Interactive
+// Interactive — extension-host infrastructure (REPL UI not exposed to authors)
 import './contrib/interactive/browser/interactive.contribution.js';
 
 // repl — Norris Writer: disabled (notebook REPL)
@@ -307,7 +308,7 @@ import './contrib/multiDiffEditor/browser/multiDiffEditor.contribution.js';
 // Commands
 import './contrib/commands/common/commands.contribution.js';
 
-// Comments
+// Comments — extension-host infrastructure (PR review UI not used in author app)
 import './contrib/comments/browser/comments.contribution.js';
 
 // URL Support
@@ -348,8 +349,8 @@ import './contrib/styleOverrides/browser/styleOverrides.contribution.js';
 // import './contrib/remote/common/remote.contribution.js';
 // import './contrib/remote/browser/remote.contribution.js';
 
-// Emmet
-import './contrib/emmet/browser/emmet.contribution.js';
+// Emmet — Norris Writer: disabled
+// import './contrib/emmet/browser/emmet.contribution.js';
 
 // CodeEditor Contributions
 import './contrib/codeEditor/browser/codeEditor.contribution.js';
@@ -392,17 +393,17 @@ import './contrib/welcomeWalkthrough/browser/walkThrough.contribution.js';
 import './contrib/welcomeViews/common/viewsWelcome.contribution.js';
 import './contrib/welcomeViews/common/newFile.contribution.js';
 
-// Welcome onboarding (required by startup page; not the IDE scenario onboarding)
-import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
+// Welcome onboarding (VS Code experiment) — Norris Writer: disabled
+// import './contrib/welcomeOnboarding/browser/welcomeOnboarding.contribution.js';
 
 // Onboarding (scenario engine) — Norris Writer: disabled
 // import './contrib/onboarding/browser/onboarding.contribution.js';
 
-// Call Hierarchy
-import './contrib/callHierarchy/browser/callHierarchy.contribution.js';
+// Call Hierarchy — Norris Writer: disabled
+// import './contrib/callHierarchy/browser/callHierarchy.contribution.js';
 
-// Type Hierarchy
-import './contrib/typeHierarchy/browser/typeHierarchy.contribution.js';
+// Type Hierarchy — Norris Writer: disabled
+// import './contrib/typeHierarchy/browser/typeHierarchy.contribution.js';
 
 // Outline
 import './contrib/codeEditor/browser/outline/documentSymbolsOutline.js';
@@ -423,8 +424,8 @@ import './contrib/authentication/browser/authentication.contribution.js';
 // User Data Profiles
 import './contrib/userDataProfile/browser/userDataProfile.contribution.js';
 
-// Continue Edit Session
-import './contrib/editSessions/browser/editSessions.contribution.js';
+// Continue Edit Session — Norris Writer: disabled
+// import './contrib/editSessions/browser/editSessions.contribution.js';
 
 // Remote Coding Agents — Norris Writer: disabled
 // import './contrib/remoteCodingAgents/browser/remoteCodingAgents.contribution.js';
@@ -451,8 +452,8 @@ import './contrib/list/browser/list.contribution.js';
 // Accessibility Signals
 import './contrib/accessibilitySignals/browser/accessibilitySignal.contribution.js';
 
-// Bracket Pair Colorizer 2 Telemetry
-import './contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution.js';
+// Bracket Pair Colorizer 2 Telemetry — Norris Writer: disabled
+// import './contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution.js';
 
 // Accessibility
 import './contrib/accessibility/browser/accessibility.contribution.js';
@@ -472,8 +473,8 @@ import './contrib/inlineCompletions/browser/inlineCompletions.contribution.js';
 // Drop or paste into
 import './contrib/dropOrPasteInto/browser/dropOrPasteInto.contribution.js';
 
-// Edit Telemetry
-import './contrib/editTelemetry/browser/editTelemetry.contribution.js';
+// Edit Telemetry — Norris Writer: disabled
+// import './contrib/editTelemetry/browser/editTelemetry.contribution.js';
 
 // Opener
 import './contrib/opener/browser/opener.contribution.js';

@@ -37,10 +37,20 @@ Keep the file Explorer sidebar for navigating story folders, chapters, notes, an
 - Do not remove the Explorer viewlet or file tree.
 - Authors organize manuscripts as files and folders; the Explorer is primary navigation.
 
+### 4. Workbench UI is the writing tool
+
+Do not remove the workbench shell: activity bar, sidebar views (Explorer, Search, SCM, Outline, Timeline), editor area, panels, command palette, Settings, Extensions view (VSIX install), and chat panel.
+
+Explicitly keep for AI: embedded browser (`browserView`), voice agents, MCP plugin UI.
+
 ## Nice to have
 
-_(Add items here as they come up.)_
+- Timeline sidebar (Git + local file history per chapter)
+- Outline sidebar (heading navigation in long markdown files)
 
 ## Explicitly not goals
 
-_(Add anti-goals here — e.g. full IDE, debug panel — when decided.)_
+- Full IDE for software development (debug, terminal, tasks, remote, TypeScript language server, programming-language grammars)
+- Jupyter notebooks (`.ipynb`)
+- Microsoft account sign-in (`microsoft-authentication` removed; GitHub auth kept for Git)
+- Extension marketplace browse (VSIX install only unless gallery added later)

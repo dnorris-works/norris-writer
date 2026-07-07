@@ -131,8 +131,8 @@ import './contrib/extensions/electron-browser/extensions.contribution.js';
 // Issues
 import './contrib/issue/electron-browser/issue.contribution.js';
 
-// Surveys
-import './contrib/surveys/browser/survey.contribution.js';
+// Surveys — Norris Writer: disabled
+// import './contrib/surveys/browser/survey.contribution.js';
 
 // Process Explorer — Norris Writer: disabled
 // import './contrib/processExplorer/electron-browser/processExplorer.contribution.js';
@@ -144,16 +144,15 @@ import './contrib/surveys/browser/survey.contribution.js';
 // import './contrib/terminal/electron-browser/terminal.contribution.js';
 
 // Themes
-import './contrib/themes/browser/themes.test.contribution.js';
+// import './contrib/themes/browser/themes.test.contribution.js';
 import './services/themes/electron-browser/themes.contribution.js';
-// User Data Sync
-import './contrib/userDataSync/electron-browser/userDataSync.contribution.js';
+// User Data Sync — Norris Writer: disabled
+// import './contrib/userDataSync/electron-browser/userDataSync.contribution.js';
 
-// Tags
-import './contrib/tags/electron-browser/workspaceTagsService.js';
-import './contrib/tags/electron-browser/tags.contribution.js';
-// Performance
-import './contrib/performance/electron-browser/performance.contribution.js';
+// Tags — noop service so startup contributions do not fail (telemetry tags disabled)
+import './contrib/tags/browser/workspaceTagsService.js';
+// Performance — Norris Writer: disabled
+// import './contrib/performance/electron-browser/performance.contribution.js';
 
 // Tasks — Norris Writer: disabled
 // import './contrib/tasks/electron-browser/taskService.js';
@@ -198,8 +197,8 @@ import './contrib/emergencyAlert/electron-browser/emergencyAlert.contribution.js
 // MCP
 import './contrib/mcp/electron-browser/mcp.contribution.js';
 
-// Policy Export
-import './contrib/policyExport/electron-browser/policyExport.contribution.js';
+// Policy Export — Norris Writer: disabled
+// import './contrib/policyExport/electron-browser/policyExport.contribution.js';
 
 // Keybindings Export
 import './contrib/keybindingsExport/electron-browser/keybindingsExport.contribution.js';
