@@ -19,6 +19,7 @@ env:
   VSCODE_QUALITY: oss
   ELECTRON_SKIP_BINARY_DOWNLOAD: 1
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   compile:
@@ -86,8 +87,6 @@ jobs:
 
       - name: Build macOS app
         run: npm run gulp vscode-darwin-arm64-min-ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload macOS app artifact
         uses: actions/upload-artifact@v4
