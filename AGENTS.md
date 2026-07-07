@@ -1,7 +1,17 @@
-# VS Code Agents Instructions
+# Norris Writer — Agent Instructions
 
-This file provides instructions for AI coding agents working with the VS Code codebase.
+Norris Writer is a standalone fiction writing app built from Code OSS sources.
 
-For detailed project overview, architecture, coding guidelines, and validation steps, see the [Copilot Instructions](.github/copilot-instructions.md).
+For product goals (what to keep and build), see [.cursor/rules/product-vision.mdc](.cursor/rules/product-vision.mdc).
 
-For Norris Writer product goals (what to keep and build), see [.cursor/rules/product-vision.mdc](.cursor/rules/product-vision.mdc).
+## Architecture
+
+- Product code: `src/vs/workbench/contrib/norrisWriter/`
+- App data: `~/.norris-writer/` (`product.json` `dataFolderName`)
+- Codex SQLite: `{userDataPath}/codex.db`
+
+## Validation
+
+- `npm run compile`
+- `npm run test-node -- --run src/vs/workbench/contrib/norrisWriter/test/node/codexDatabase.test.js`
+- `./scripts/code.sh` to launch locally
