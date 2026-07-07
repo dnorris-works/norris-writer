@@ -42,6 +42,9 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		'git.enabled': true,
 		'scm.defaultViewMode': 'tree',
 		'workbench.welcomePage.experimentalOnboarding': false,
+		'workbench.welcomePage.walkthroughs.openOnInstall': false,
+		'update.mode': 'none',
+		'extensions.autoCheckUpdates': false,
 		'workbench.panel.defaultLocation': 'bottom',
 		'zenMode.hideStatusBar': false,
 		'zenMode.hideActivityBar': false,
@@ -60,6 +63,8 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		[ChatConfiguration.TitleBarSignInEnabled]: false,
 		[ChatConfiguration.DefaultNewSessionMode]: 'ask',
 		[ChatConfiguration.AIDisabled]: false,
+		[ChatConfiguration.AgentEnabled]: false,
+		[ChatConfiguration.ExtensionToolsEnabled]: false,
 		[ChatConfiguration.ChatViewSessionsEnabled]: false,
 	},
 	source: 'norrisWriterDefaults'

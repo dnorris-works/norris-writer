@@ -124,8 +124,8 @@ import './contrib/codeEditor/electron-browser/codeEditor.contribution.js';
 // Norris Writer: extension-host debug IPC disabled (no-op stub for extension host startup)
 import './contrib/norrisWriter/electron-browser/norrisWriterExtensionHostDebugStub.js';
 
-// Extensions Management — Norris Writer: disabled (marketplace UI)
-// import './contrib/extensions/electron-browser/extensions.contribution.js';
+// Extensions Management — desktop helpers (open extensions folder, etc.)
+import './contrib/extensions/electron-browser/extensions.contribution.js';
 // import './contrib/extensions/electron-browser/devtoolsExtensionHost.contribution.js';
 
 // Issues

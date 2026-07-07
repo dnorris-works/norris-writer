@@ -322,9 +322,8 @@ import './contrib/customEditor/browser/customEditor.contribution.js';
 // External Uri Opener
 import './contrib/externalUriOpener/common/externalUriOpener.contribution.js';
 
-// Extensions Management — Norris Writer: disabled (no marketplace UI)
-// import './contrib/extensions/browser/extensions.contribution.js';
-// import './contrib/extensions/browser/extensionsViewlet.js';
+// Extensions Management — Norris Writer: VSIX install and installed-extension management (no marketplace gallery in product.json)
+import './contrib/extensions/browser/extensions.contribution.js';
 
 // Output View
 import './contrib/output/browser/output.contribution.js';

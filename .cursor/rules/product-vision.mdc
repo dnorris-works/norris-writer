@@ -1,0 +1,46 @@
+---
+description: Norris Writer product vision — features to keep and build toward
+alwaysApply: true
+---
+
+# Norris Writer — Product Vision
+
+This is the author's list of what Norris Writer should be. Preserve these when refactoring or cutting IDE features. Add new items here as the product evolves.
+
+## Must have
+
+### 1. Git in each story folder
+
+Each story (novel, series book, etc.) lives in its own folder with its own Git repository for version history, drafts, and branches — not a single repo for the whole workspace.
+
+- Keep SCM/Git enabled (`git.enabled`, Source Control view).
+- Support opening a story folder as the workspace root so Git scopes to that story.
+- Do not remove merge/conflict tooling needed for Git workflows.
+
+### 2. The editor (current setup)
+
+Keep the writing editor experience as configured today unless the author explicitly asks to change it.
+
+Current defaults (`norrisWriter.contribution.ts`):
+
+- Markdown opens in the rich markdown editor (`*.md` → `vscode.markdown.editor`).
+- Writing View: formatted text while editing (`norrisWriter.markdown.alwaysRendered`).
+- Paper appearance (`norrisWriter.editorAppearance` → Paper).
+- Word count in the status bar (`norrisWriter.wordCount.enabled`).
+- Activity bar on top; chat in the secondary sidebar.
+- AI chat available (TokenMix / Norris Writer chat integration).
+
+### 3. The Explorer
+
+Keep the file Explorer sidebar for navigating story folders, chapters, notes, and assets.
+
+- Do not remove the Explorer viewlet or file tree.
+- Authors organize manuscripts as files and folders; the Explorer is primary navigation.
+
+## Nice to have
+
+_(Add items here as they come up.)_
+
+## Explicitly not goals
+
+_(Add anti-goals here — e.g. full IDE, debug panel — when decided.)_
