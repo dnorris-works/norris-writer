@@ -20,6 +20,8 @@ import { IDebugService } from '../../debug/common/debug.js';
 import { NullDebugService, NullDebugVisualizerService } from '../../debug/common/nullDebugService.js';
 import { IDebugVisualizerService } from '../../debug/common/debugVisualizers.js';
 import { IOnboardingService } from '../../welcomeOnboarding/common/onboardingService.js';
+import { EditSuggestionId } from '../../../../editor/common/textModelEditSource.js';
+import { IAiEditTelemetryService, IEditTelemetryCodeAcceptedData, IEditTelemetryCodeRejectedData, IEditTelemetryCodeSuggestedData } from '../../editTelemetry/browser/telemetry/aiEditTelemetry/aiEditTelemetryService.js';
 import { NullAgentHostService } from '../../../../platform/agentHost/browser/nullAgentHostService.js';
 import { IAgentHostService } from '../../../../platform/agentHost/common/agentService.js';
 import { IRemoteAgentHostService, NullRemoteAgentHostService } from '../../../../platform/agentHost/common/remoteAgentHostService.js';
@@ -90,6 +92,20 @@ class NorrisWriterNoOpPluginInstallService implements IPluginInstallService {
 
 registerSingleton(IOnboardingService, NorrisWriterNoOpOnboardingService, InstantiationType.Delayed);
 registerSingleton(IPluginInstallService, NorrisWriterNoOpPluginInstallService, InstantiationType.Delayed);
+
+class NorrisWriterNoOpAiEditTelemetryService implements IAiEditTelemetryService {
+	declare readonly _serviceBrand: undefined;
+
+	createSuggestionId(_data: Omit<IEditTelemetryCodeSuggestedData, 'suggestionId'>): EditSuggestionId {
+		return EditSuggestionId.newId();
+	}
+
+	handleCodeAccepted(_data: IEditTelemetryCodeAcceptedData): void { }
+
+	handleCodeRejected(_data: IEditTelemetryCodeRejectedData): void { }
+}
+
+registerSingleton(IAiEditTelemetryService, NorrisWriterNoOpAiEditTelemetryService, InstantiationType.Delayed);
 // Debug UI is disabled; notebook and accessibility contributions still inject IDebugService.
 registerSingleton(IDebugService, NullDebugService, InstantiationType.Delayed);
 registerSingleton(IDebugVisualizerService, NullDebugVisualizerService, InstantiationType.Delayed);
