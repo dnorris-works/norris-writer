@@ -19,12 +19,17 @@ import { IChatProgress } from '../../chat/common/chatService/chatService.js';
 import { IChatProgressHistoryResponseContent } from '../../chat/common/model/chatModel.js';
 import { IChatTaskDto } from '../../chat/common/chatService/chatService.js';
 import { ChatMessageRole, ILanguageModelsService } from '../../chat/common/languageModels.js';
+import { getCodeEditor } from '../../../../editor/browser/editorBrowser.js';
 import {
 	NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID,
 	TOKENMIX_VENDOR_ID,
 	TokenMixConfiguration,
 } from '../common/tokenMixConstants.js';
+import { NORRIS_NEW_CODEX_ENTRY_COMMAND_ID, NORRIS_OPEN_CODEX_COMMAND_ID } from '../common/norrisWriterCodexConstants.js';
+import { composeUserMessageWithContext, NorrisWriterChatContextResolver } from './norrisWriterChatContext.js';
+import { formatCodexSystemSection, INorrisWriterCodexService } from './norrisWriterCodexService.js';
 import { ITokenMixCredentialService } from './tokenMixCredentialService.js';
+import { IEditorService } from '../../../services/editor/common/editorService.js';
 
 const NORRIS_WRITER_AGENT_ID = 'norris.writer.assistant';
 const NORRIS_WRITER_EXTENSION_ID = new ExtensionIdentifier('norris.writer');
@@ -34,6 +39,7 @@ const WRITING_SYSTEM_PROMPT = [
 	'Help the author brainstorm, draft, revise, develop characters, and refine plot and prose.',
 	'Be creative, clear, and concise. Match the author\'s genre and tone when known.',
 	'When suggesting rewrites, preserve the author\'s voice unless they ask otherwise.',
+	'When reference material is attached manually, treat it as additional context for that request.',
 ].join(' ');
 
 class NorrisWriterWritingAssistant implements IChatAgentImplementation {
@@ -42,7 +48,14 @@ class NorrisWriterWritingAssistant implements IChatAgentImplementation {
 		@ILanguageModelsService private readonly languageModelsService: ILanguageModelsService,
 		@ITokenMixCredentialService private readonly credentialService: ITokenMixCredentialService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
-	) { }
+		@IInstantiationService instantiationService: IInstantiationService,
+		@INorrisWriterCodexService private readonly codexService: INorrisWriterCodexService,
+		@IEditorService private readonly editorService: IEditorService,
+	) {
+		this.contextResolver = instantiationService.createInstance(NorrisWriterChatContextResolver);
+	}
+
+	private readonly contextResolver: NorrisWriterChatContextResolver;
 
 	async invoke(
 		request: IChatAgentRequest,
@@ -76,7 +89,7 @@ class NorrisWriterWritingAssistant implements IChatAgentImplementation {
 		}
 
 		try {
-			const messages = this._buildMessages(history, request.message);
+			const messages = await this._buildMessages(history, request, token);
 			const response = await this.languageModelsService.sendChatRequest(modelId, undefined, messages, {}, token);
 
 			let text = '';
@@ -136,19 +149,40 @@ class NorrisWriterWritingAssistant implements IChatAgentImplementation {
 		return undefined;
 	}
 
-	private _buildMessages(history: IChatAgentHistoryEntry[], userMessage: string) {
-		const messages = [{ role: ChatMessageRole.System, content: [{ type: 'text' as const, value: WRITING_SYSTEM_PROMPT }] }];
+	private async _buildMessages(history: IChatAgentHistoryEntry[], request: IChatAgentRequest, token: CancellationToken) {
+		const activeEditorText = this._getActiveEditorText();
+		const codexContext = await this.codexService.resolveContext({
+			message: request.message,
+			activeEditorText,
+		}, token);
+		const systemPrompt = codexContext
+			? `${WRITING_SYSTEM_PROMPT}\n\n${formatCodexSystemSection(codexContext)}`
+			: WRITING_SYSTEM_PROMPT;
+		const messages = [{ role: ChatMessageRole.System, content: [{ type: 'text' as const, value: systemPrompt }] }];
 
 		for (const entry of history) {
-			messages.push({ role: ChatMessageRole.User, content: [{ type: 'text' as const, value: entry.request.message }] });
+			const userContent = await this._formatUserTurn(entry.request.message, entry.request.variables.variables, token);
+			messages.push({ role: ChatMessageRole.User, content: [{ type: 'text' as const, value: userContent }] });
 			const assistantText = extractAssistantText(entry.response);
 			if (assistantText) {
 				messages.push({ role: ChatMessageRole.Assistant, content: [{ type: 'text' as const, value: assistantText }] });
 			}
 		}
 
-		messages.push({ role: ChatMessageRole.User, content: [{ type: 'text' as const, value: userMessage }] });
+		const userContent = await this._formatUserTurn(request.message, request.variables.variables, token);
+		messages.push({ role: ChatMessageRole.User, content: [{ type: 'text' as const, value: userContent }] });
 		return messages;
+	}
+
+	private _getActiveEditorText(): string | undefined {
+		const control = this.editorService.activeTextEditorControl;
+		const editor = control ? getCodeEditor(control) : undefined;
+		return editor?.getModel()?.getValue();
+	}
+
+	private async _formatUserTurn(message: string, variables: IChatAgentRequest['variables']['variables'], token: CancellationToken): Promise<string> {
+		const context = await this.contextResolver.formatAttachedContext(variables, token);
+		return composeUserMessageWithContext(message, context);
 	}
 }
 
@@ -185,10 +219,16 @@ class NorrisWriterChatContribution extends Disposable implements IWorkbenchContr
 			isCore: true,
 			isDynamic: true,
 			metadata: {
-				additionalWelcomeMessage: localize(
+				additionalWelcomeMessage: new MarkdownString(localize(
 					'norrisWriter.chatAgent.welcomeMessage',
-					'Ask me to brainstorm, draft, revise, or polish your fiction. Configure TokenMix in Settings if you have not already.',
-				),
+					'Build your **Codex** in the `codex/` folder — characters, locations, lore, and bible entries that the AI uses automatically. Set `aiContext: always` or `when-detected` in each entry\'s frontmatter.\n\n[Open Codex](command:{0}) · [New Codex Entry](command:{1})',
+					NORRIS_OPEN_CODEX_COMMAND_ID,
+					NORRIS_NEW_CODEX_ENTRY_COMMAND_ID,
+				), { isTrusted: true }),
+			},
+			capabilities: {
+				supportsFileAttachments: true,
+				supportsInstructionAttachments: true,
 			},
 			slashCommands: [],
 			locations: [ChatAgentLocation.Chat],

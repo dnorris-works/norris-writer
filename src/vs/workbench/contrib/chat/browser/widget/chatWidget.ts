@@ -751,7 +751,13 @@ export class ChatWidget extends Disposable implements IChatWidget {
 
 		this.container = dom.append(parent, $('.interactive-session'));
 		this.welcomeMessageContainer = dom.append(this.container, $('.chat-welcome-view-container', { style: 'display: none' }));
-		this._register(dom.addStandardDisposableListener(this.welcomeMessageContainer, dom.EventType.CLICK, () => this.focusInput()));
+		this._register(dom.addStandardDisposableListener(this.welcomeMessageContainer, dom.EventType.CLICK, e => {
+			const target = e.browserEvent.target;
+			if (target instanceof Element && target.closest('a, button, .monaco-button')) {
+				return;
+			}
+			this.focusInput();
+		}));
 
 		this._register(this.chatSuggestNextWidget.onDidChangeHeight(() => {
 			if (this.bodyDimension) {

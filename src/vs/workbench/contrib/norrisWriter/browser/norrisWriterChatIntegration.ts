@@ -16,6 +16,7 @@ import { chatViewsWelcomeRegistry } from '../../chat/browser/viewsWelcome/chatVi
 import { ChatContextKeys } from '../../chat/common/actions/chatContextKeys.js';
 import { ILanguageModelsService } from '../../chat/common/languageModels.js';
 import { NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID, TokenMixConfiguration } from '../common/tokenMixConstants.js';
+import { NORRIS_NEW_CODEX_ENTRY_COMMAND_ID, NORRIS_OPEN_CODEX_COMMAND_ID } from '../common/norrisWriterCodexConstants.js';
 import { ITokenMixCredentialService } from './tokenMixCredentialService.js';
 
 // Copilot setup was removed from Norris Writer; this contribution is still required
@@ -27,9 +28,11 @@ chatViewsWelcomeRegistry.register({
 	title: localize('norrisWriter.chatWelcome.title', 'Writing Assistant'),
 	content: new MarkdownString(localize(
 		'norrisWriter.chatWelcome.message',
-		'Brainstorm, draft, and revise your manuscript with TokenMix.\n\n[Configure TokenMix](command:{0})',
+		'Use your project **Codex** for characters, locations, and lore — entries in the `codex/` folder are injected automatically based on each entry\'s `aiContext` setting.\n\n[Open Codex](command:{0}) · [New Codex Entry](command:{1}) · [Configure TokenMix](command:{2})',
+		NORRIS_OPEN_CODEX_COMMAND_ID,
+		NORRIS_NEW_CODEX_ENTRY_COMMAND_ID,
 		NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID,
-	), { isTrusted: { enabledCommands: [NORRIS_CONFIGURE_TOKENMIX_COMMAND_ID] } }),
+	), { isTrusted: true }),
 	when: ContextKeyExpr.and(
 		ChatContextKeys.panelParticipantRegistered,
 		ChatContextKeys.Setup.hidden.negate()!,

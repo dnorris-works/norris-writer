@@ -16,11 +16,17 @@ import {
 	NorrisWriterEditorAppearanceSetting,
 } from '../common/editorAppearanceConstants.js';
 import {
+	NORRIS_CODEX_FOLDER_DEFAULT,
+	NorrisWriterCodexConfiguration,
+} from '../common/norrisWriterCodexConstants.js';
+import {
 	TOKENMIX_DEFAULT_BASE_URL,
 	TOKENMIX_DEFAULT_MODEL,
 	TokenMixConfiguration,
 } from '../common/tokenMixConstants.js';
 import './norrisWriterActions.js';
+import './norrisWriterChatWelcomeActions.js';
+import './norrisWriterCodexService.js';
 import './norrisWriterEditorAppearance.js';
 import './norrisWriterWordCount.js';
 import './norrisWriterChatIntegration.js';
@@ -48,6 +54,8 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerDefaultCon
 		[TokenMixConfiguration.Enabled]: true,
 		[TokenMixConfiguration.BaseUrl]: TOKENMIX_DEFAULT_BASE_URL,
 		[TokenMixConfiguration.DefaultModel]: TOKENMIX_DEFAULT_MODEL,
+		[NorrisWriterCodexConfiguration.Enabled]: true,
+		[NorrisWriterCodexConfiguration.Folder]: NORRIS_CODEX_FOLDER_DEFAULT,
 		[WORKSPACE_TRUST_ENABLED]: false,
 		[ChatConfiguration.TitleBarSignInEnabled]: false,
 		[ChatConfiguration.DefaultNewSessionMode]: 'ask',
@@ -129,6 +137,22 @@ Registry.as<IConfigurationRegistry>(Extensions.Configuration).registerConfigurat
 			tags: ['tokenMix'],
 			title: localize('norrisWriter.tokenMix.defaultModel.title', "TokenMix: Default Model"),
 			description: localize('norrisWriter.tokenMix.defaultModel', "Default TokenMix model id when none is selected in chat (for example gpt-4o-mini)."),
+		},
+		[NorrisWriterCodexConfiguration.Enabled]: {
+			type: 'boolean',
+			default: true,
+			order: 20,
+			tags: ['codex'],
+			title: localize('norrisWriter.codex.enabled.title', "Codex: Enabled"),
+			description: localize('norrisWriter.codex.enabled', "Automatically inject project codex entries into Writing Assistant prompts."),
+		},
+		[NorrisWriterCodexConfiguration.Folder]: {
+			type: 'string',
+			default: NORRIS_CODEX_FOLDER_DEFAULT,
+			order: 21,
+			tags: ['codex'],
+			title: localize('norrisWriter.codex.folder.title', "Codex: Folder"),
+			description: localize('norrisWriter.codex.folder', "Folder name (relative to the workspace root) containing codex entry files."),
 		},
 	},
 });

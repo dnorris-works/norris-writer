@@ -19,7 +19,7 @@ import { URI } from '../../../../../base/common/uri.js';
 import { IContextKeyService } from '../../../../../platform/contextkey/common/contextkey.js';
 import { IInstantiationService } from '../../../../../platform/instantiation/common/instantiation.js';
 import { ILogService } from '../../../../../platform/log/common/log.js';
-import { IMarkdownRendererService } from '../../../../../platform/markdown/browser/markdownRenderer.js';
+import { IMarkdownRendererService, openLinkFromMarkdown } from '../../../../../platform/markdown/browser/markdownRenderer.js';
 import { IOpenerService } from '../../../../../platform/opener/common/opener.js';
 import { defaultButtonStyles } from '../../../../../platform/theme/browser/defaultStyles.js';
 import { ChatAgentLocation } from '../../common/constants.js';
@@ -220,18 +220,21 @@ export class ChatViewWelcomePart extends Disposable {
 
 	private renderMarkdownMessageContent(content: IMarkdownString, options: IChatViewWelcomeRenderOptions | undefined): IRenderedMarkdown {
 		const messageResult = this._register(this.markdownRendererService.render(content));
-		// eslint-disable-next-line no-restricted-syntax
-		const firstLink = options?.firstLinkToButton ? messageResult.element.querySelector('a') : undefined;
-		if (firstLink) {
-			const target = firstLink.getAttribute('data-href');
-			const button = this._register(new Button(firstLink.parentElement!, defaultButtonStyles));
-			button.label = firstLink.textContent ?? '';
-			if (target) {
-				this._register(button.onDidClick(() => {
-					this.openerService.open(target, { allowCommands: true });
+
+		if (options?.firstLinkToButton) {
+			for (const link of [...messageResult.element.querySelectorAll('a[data-href]')]) {
+				const target = link.getAttribute('data-href');
+				if (!target) {
+					continue;
+				}
+				const button = this._register(new Button(link.parentElement!, defaultButtonStyles));
+				button.label = link.textContent ?? '';
+				this._register(button.onDidClick(e => {
+					dom.EventHelper.stop(e, true);
+					void openLinkFromMarkdown(this.openerService, target, content.isTrusted);
 				}));
+				link.replaceWith(button.element);
 			}
-			firstLink.replaceWith(button.element);
 		}
 		return messageResult;
 	}

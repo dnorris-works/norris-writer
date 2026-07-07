@@ -11,8 +11,22 @@ import { IFileDialogService } from '../../../../platform/dialogs/common/dialogs.
 import { IFileService } from '../../../../platform/files/common/files.js';
 import { ICommandService } from '../../../../platform/commands/common/commands.js';
 import { ServicesAccessor } from '../../../../platform/instantiation/common/instantiation.js';
-import { IQuickInputService } from '../../../../platform/quickinput/common/quickInput.js';
+import { IQuickInputService, IQuickPickItem } from '../../../../platform/quickinput/common/quickInput.js';
 import { CHAT_OPEN_ACTION_ID } from '../../chat/browser/actions/chatActions.js';
+import {
+	CODEX_CHARACTER_TEMPLATE,
+	CODEX_ENTRY_TEMPLATE,
+	CODEX_SERIES_BIBLE_TEMPLATE,
+	slugifyCodexTitle,
+} from '../common/norrisWriterCodexTemplates.js';
+import {
+	NORRIS_CODEX_FOLDER_DEFAULT,
+	NORRIS_NEW_CODEX_ENTRY_COMMAND_ID,
+	NORRIS_OPEN_CODEX_COMMAND_ID,
+	NorrisWriterCodexEntryType,
+} from '../common/norrisWriterCodexConstants.js';
+import { INorrisWriterCodexService } from './norrisWriterCodexService.js';
+import { IEditorService } from '../../../services/editor/common/editorService.js';
 
 const NOVEL_GITIGNORE = [
 	'.norris-writer/',
@@ -32,7 +46,12 @@ export const NORRIS_NEW_NOVEL_COMMAND_ID = 'norrisWriter.newNovel';
 export const NORRIS_OPEN_CHAT_COMMAND_ID = 'norrisWriter.openChat';
 export const NORRIS_WRITING_LAYOUT_COMMAND_ID = 'norrisWriter.writingLayout';
 /** @deprecated Use `norrisWriter.configureTokenMix` instead */
+/** @deprecated Use `norrisWriter.configureTokenMix` instead */
 export const NORRIS_CONFIGURE_OPENROUTER_COMMAND_ID = 'norrisWriter.configureOpenRouter';
+
+interface ICodexTypePickItem extends IQuickPickItem {
+	readonly entryType: NorrisWriterCodexEntryType;
+}
 
 registerAction2(class NorrisNewNovelAction extends Action2 {
 	constructor() {
@@ -88,11 +107,15 @@ registerAction2(class NorrisNewNovelAction extends Action2 {
 		}
 
 		await fileService.createFolder(joinPath(projectRoot, 'manuscript'));
+		await fileService.createFolder(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, 'characters'));
+		await fileService.createFolder(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, 'locations'));
+		await fileService.createFolder(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, 'lore'));
 		await fileService.createFolder(joinPath(projectRoot, 'notes'));
-		await fileService.createFolder(joinPath(projectRoot, 'characters'));
 		await fileService.writeFile(joinPath(projectRoot, 'manuscript', 'chapter-01.md'), VSBuffer.fromString(CHAPTER_TEMPLATE));
+		await fileService.writeFile(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, 'lore', 'series-bible.codex.md'), VSBuffer.fromString(CODEX_SERIES_BIBLE_TEMPLATE));
+		await fileService.writeFile(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, 'characters', 'protagonist.codex.md'), VSBuffer.fromString(CODEX_CHARACTER_TEMPLATE('Protagonist')));
+		await fileService.writeFile(joinPath(projectRoot, NORRIS_CODEX_FOLDER_DEFAULT, '_template.codex.md'), VSBuffer.fromString(CODEX_ENTRY_TEMPLATE));
 		await fileService.writeFile(joinPath(projectRoot, 'notes', 'ideas.md'), VSBuffer.fromString('# Ideas\n\n'));
-		await fileService.writeFile(joinPath(projectRoot, 'characters', 'protagonist.md'), VSBuffer.fromString('# Protagonist\n\n'));
 		await fileService.writeFile(joinPath(projectRoot, '.gitignore'), VSBuffer.fromString(NOVEL_GITIGNORE));
 		await fileService.writeFile(joinPath(projectRoot, 'README.md'), VSBuffer.fromString(`# ${projectName.trim()}\n\nA Norris Writer manuscript project.\n`));
 
@@ -133,3 +156,105 @@ registerAction2(class NorrisWritingLayoutAction extends Action2 {
 		await commandService.executeCommand('workbench.action.toggleZenMode');
 	}
 });
+
+registerAction2(class NorrisOpenCodexAction extends Action2 {
+	constructor() {
+		super({
+			id: NORRIS_OPEN_CODEX_COMMAND_ID,
+			title: localize2('norrisWriter.openCodex', 'Open Codex'),
+			category: localize2('norrisWriter.category', 'Norris Writer'),
+			f1: true,
+		});
+	}
+
+	async run(accessor: ServicesAccessor): Promise<void> {
+		const codexService = accessor.get(INorrisWriterCodexService);
+		const fileService = accessor.get(IFileService);
+		const commandService = accessor.get(ICommandService);
+		const codexFolder = codexService.getCodexFolder();
+		if (!codexFolder) {
+			throw new Error(localize('norrisWriter.codex.noWorkspace', 'Open a novel project folder first.'));
+		}
+		if (!(await fileService.exists(codexFolder))) {
+			await fileService.createFolder(codexFolder);
+		}
+		await commandService.executeCommand('revealInExplorer', codexFolder);
+	}
+});
+
+registerAction2(class NorrisNewCodexEntryAction extends Action2 {
+	constructor() {
+		super({
+			id: NORRIS_NEW_CODEX_ENTRY_COMMAND_ID,
+			title: localize2('norrisWriter.newCodexEntry', 'New Codex Entry...'),
+			category: localize2('norrisWriter.category', 'Norris Writer'),
+			f1: true,
+		});
+	}
+
+	async run(accessor: ServicesAccessor): Promise<void> {
+		const codexService = accessor.get(INorrisWriterCodexService);
+		const fileService = accessor.get(IFileService);
+		const quickInputService = accessor.get(IQuickInputService);
+		const editorService = accessor.get(IEditorService);
+		const codexFolder = codexService.getCodexFolder();
+		if (!codexFolder) {
+			throw new Error(localize('norrisWriter.codex.noWorkspace', 'Open a novel project folder first.'));
+		}
+
+		const typePick = await quickInputService.pick<ICodexTypePickItem>(
+			[
+				{ label: localize('norrisWriter.codex.type.character', 'Character'), entryType: NorrisWriterCodexEntryType.Character },
+				{ label: localize('norrisWriter.codex.type.location', 'Location'), entryType: NorrisWriterCodexEntryType.Location },
+				{ label: localize('norrisWriter.codex.type.lore', 'Lore / Bible'), entryType: NorrisWriterCodexEntryType.Lore },
+				{ label: localize('norrisWriter.codex.type.object', 'Object'), entryType: NorrisWriterCodexEntryType.Object },
+				{ label: localize('norrisWriter.codex.type.other', 'Other'), entryType: NorrisWriterCodexEntryType.Other },
+			],
+			{ title: localize('norrisWriter.codex.newEntryType', 'Codex entry type'), placeHolder: localize('norrisWriter.codex.newEntryTypePlaceholder', 'What kind of entry?') },
+		);
+		if (!typePick) {
+			return;
+		}
+
+		const title = await quickInputService.input({
+			title: localize('norrisWriter.codex.newEntryTitle', 'New Codex Entry'),
+			prompt: localize('norrisWriter.codex.newEntryTitlePrompt', 'Entry title (used for AI detection)'),
+			validateInput: async (value) => !value.trim()
+				? localize('norrisWriter.codex.newEntryTitleRequired', 'Title is required')
+				: undefined,
+		});
+		if (!title) {
+			return;
+		}
+
+		const typeFolder = getCodexTypeFolder(typePick.entryType);
+		const targetFolder = typeFolder ? joinPath(codexFolder, typeFolder) : codexFolder;
+		await fileService.createFolder(targetFolder);
+
+		const slug = slugifyCodexTitle(title);
+		let fileUri = joinPath(targetFolder, `${slug}.codex.md`);
+		let suffix = 2;
+		while (await fileService.exists(fileUri)) {
+			fileUri = joinPath(targetFolder, `${slug}-${suffix}.codex.md`);
+			suffix++;
+		}
+
+		const body = typePick.entryType === NorrisWriterCodexEntryType.Character
+			? CODEX_CHARACTER_TEMPLATE(title.trim())
+			: CODEX_ENTRY_TEMPLATE.replace('Entry Title', title.trim()).replace('type: character', `type: ${typePick.entryType}`);
+
+		await fileService.writeFile(fileUri, VSBuffer.fromString(body));
+		codexService.invalidate();
+		await editorService.openEditor({ resource: fileUri });
+	}
+});
+
+function getCodexTypeFolder(type: NorrisWriterCodexEntryType): string {
+	switch (type) {
+		case NorrisWriterCodexEntryType.Character: return 'characters';
+		case NorrisWriterCodexEntryType.Location: return 'locations';
+		case NorrisWriterCodexEntryType.Lore: return 'lore';
+		case NorrisWriterCodexEntryType.Object: return 'objects';
+		default: return '';
+	}
+}
