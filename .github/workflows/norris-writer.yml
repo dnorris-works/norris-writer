@@ -17,7 +17,6 @@ permissions:
 
 env:
   VSCODE_QUALITY: oss
-  ELECTRON_SKIP_BINARY_DOWNLOAD: 1
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -25,6 +24,8 @@ jobs:
   compile:
     name: Compile
     runs-on: ubuntu-latest
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,6 +48,8 @@ jobs:
   compile-macos:
     name: Compile (macOS)
     runs-on: macos-latest
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,11 +85,8 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Compile for packaging
-        run: npm run compile
-
       - name: Build macOS app
-        run: npm run gulp vscode-darwin-arm64-min-ci
+        run: npm run gulp vscode-darwin-arm64-min
 
       - name: Upload macOS app artifact
         uses: actions/upload-artifact@v4
